@@ -24,7 +24,6 @@ public:
     map<string, ConstraintMatrix *> build_constraint_matrices(string metapath, vector<int> *dimensions);
     void delete_constraint_matrices(map<string, ConstraintMatrix *> constraint_matrices);
     vector<TransitionMatrix*> build_transition_matrices(string metapath, vector<int> dimensions, map<string, ConstraintMatrix*> constraint_matrices);
-    vector<TransitionMatrix*> adaptive_build_transition_matrices(string metapath, vector<int> dimensions, vector<unsigned long long int> *non_zeros);
     void write_results_to_file(TransitionMatrix* result, string metapath);
 
 };

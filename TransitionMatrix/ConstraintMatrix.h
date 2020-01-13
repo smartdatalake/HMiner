@@ -22,12 +22,14 @@ private:
     map<string, string> constraints_;
     int dimension_;
 
-    SparseMatrix<int> *matrix_;
+    SparseMatrix<int, RowMajor> *_matrix;
 public:
     ConstraintMatrix(string node_name, string node_data_file, map<string, string> constraints, int dimension)
-     : node_name_(node_name), node_data_file_ (node_data_file), constraints_ (constraints), dimension_ (dimension) {}
+     : node_name_(node_name), node_data_file_ (node_data_file), constraints_ (constraints), dimension_ (dimension) {
+         this->_matrix = new SparseMatrix<int, RowMajor>(dimension, dimension);
+     }
 
-    ~ConstraintMatrix() { delete matrix_; }
+    ~ConstraintMatrix() { delete _matrix; }
 
     void build();
 
@@ -36,7 +38,7 @@ public:
     void print_constraints();
     void print();
 
-    SparseMatrix<int>* get_matrix() const;
+    SparseMatrix<int, RowMajor>* get_matrix() const;
 };
 
 

@@ -13,12 +13,11 @@ class HRankSY {
 private:
     Config* _config;
 
-    void delete_transition_matrices(vector<TransitionMatrix*> matrices);
-
 public:
-    TransitionMatrix* run(string metapath, vector<TransitionMatrix*> matrices, vector<int> dimensions);
-
+    
     HRankSY(Config *config);
+    
+    TransitionMatrix* run(string metapath, vector<TransitionMatrix*> matrices, vector<int> dimensions);
 };
 
 

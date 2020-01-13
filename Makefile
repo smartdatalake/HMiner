@@ -1,12 +1,21 @@
 CXX=g++
-CXXFLAGS+=-Wall -O3 -std=c++14 -DNDEBUG -mavx -mfma
+CXXFLAGS+=-Wall -O3 -std=c++14 -DNDEBUG
 
 all: run
 
 debug: CXXFLAGS += -g3 -DDEBUG_MSG
 debug: run
 
-run: main.o Utils.o Base/Config.o HRank/HRankSY.o TransitionMatrix/ConstraintMatrix.o TransitionMatrix/TransitionMatrix.o MatrixMultiplier/DynamicOptimizer.o Base/Executor.o MatrixMultiplier/MatrixMultiplier.o
+run: main.o \
+	Utils.o \
+	Base/Config.o \
+	HRank/HRankSY.o \
+	TransitionMatrix/ConstraintMatrix.o \
+	TransitionMatrix/TransitionMatrix.o \
+	MatrixMultiplier/DynamicOptimizer.o \
+	Base/Executor.o \
+	MatrixMultiplier/MatrixMultiplier.o
+	
 	$(CXX) -o $@ $^ -L BaseAlgorithm/ -L TransitionMatrix/ $(CXXFLAGS)
 
 clean_temp:
