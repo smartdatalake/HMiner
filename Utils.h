@@ -18,8 +18,9 @@ public:
     static int checkArg(int i, int max);
     static int get_column_idx(string filename, string fieldName);
     static int get_max_column_value(string filename, int column_idx);
-    static void print(Eigen::SparseMatrix<int> *matrix_);
-    static void debug_msg(string msg);
+    static void print(Eigen::SparseMatrix<int, RowMajor> *matrix_);
+    static void log(string msg);
+    static void logTime(clock_t begin);
 
     // TODO: merge two functions below (templates?)
     static vector<TransitionMatrix*> slice(vector<TransitionMatrix*> matrices, size_t start, size_t len);

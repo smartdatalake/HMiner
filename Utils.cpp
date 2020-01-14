@@ -94,10 +94,10 @@ int Utils::get_max_column_value(string filename, int column_idx) {
     return max_value;
 }
 
-void Utils::print(Eigen::SparseMatrix<int> *matrix_) {
+void Utils::print(Eigen::SparseMatrix<int, RowMajor> *matrix_) {
     for (int k=0; k < (*matrix_).outerSize(); ++k)
     {
-        for (Eigen::SparseMatrix<int>::InnerIterator it(*matrix_, k); it; ++it)
+        for (Eigen::SparseMatrix<int, RowMajor>::InnerIterator it(*matrix_, k); it; ++it)
         {
             std::cout << it.row() << "\t" << it.col() << "\t" << it.value() << endl;
         }
@@ -105,10 +105,23 @@ void Utils::print(Eigen::SparseMatrix<int> *matrix_) {
     std::cout << endl;
 }
 
-void Utils::debug_msg(string msg) {
-    #ifdef DEBUG_MSG
-        cout << msg << endl;
-    #endif
+void Utils::log(string msg) {
+   time_t now = time(0);
+   tm *ltm = localtime(&now);
+
+    cout << "[" << 1900 + ltm->tm_year;
+    cout << "-" << 1 + ltm->tm_mon;
+    cout << "-" <<  ltm->tm_mday;
+    cout << " "<< 1 + ltm->tm_hour << ":";
+    cout << 1 + ltm->tm_min << ":";
+    cout << 1 + ltm->tm_sec << "] ";
+
+    cout << msg;
+}
+
+void Utils::logTime(clock_t begin) {
+    cout << " Time = ";
+    cout << double(clock() - begin) / CLOCKS_PER_SEC << endl;
 }
 
 vector<TransitionMatrix*> Utils::slice(vector<TransitionMatrix*> matrices, size_t start, size_t len) {

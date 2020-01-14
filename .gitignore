@@ -30,4 +30,6 @@ data/constraints.txt
 *.o
 run
 data/out/*
-
+.vscode/
+PaperRanking/
+PaperRanking2/

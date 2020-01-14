@@ -18,11 +18,6 @@ using namespace Eigen;
 
 void ConstraintMatrix::build() {
 
-    Utils::debug_msg("Constraing matrix:" + node_name_);
-
-    // create constraint matrix
-    matrix_ = new SparseMatrix<int>(dimension_, dimension_);
-
     std::vector<Triplet<int>> triplet_list;
 
     map<int, string> field_constraints;
@@ -68,7 +63,7 @@ void ConstraintMatrix::build() {
             }
         }
 
-        matrix_->setFromTriplets(triplet_list.begin(), triplet_list.end());
+        this->_matrix->setFromTriplets(triplet_list.begin(), triplet_list.end());
     }
 
     infile.close();
@@ -78,8 +73,8 @@ int ConstraintMatrix::get_dimension() const {
     return dimension_;
 }
 
-SparseMatrix<int>* ConstraintMatrix::get_matrix() const {
-    return matrix_;
+SparseMatrix<int, RowMajor>* ConstraintMatrix::get_matrix() const {
+    return _matrix;
 }
 
 void ConstraintMatrix::print_constraints() {
@@ -89,8 +84,8 @@ void ConstraintMatrix::print_constraints() {
 }
 
 void ConstraintMatrix::print() {
-    for (int k=0; k < (*matrix_).outerSize(); ++k) {
-        for (Eigen::SparseMatrix<int>::InnerIterator it(*matrix_, k); it; ++it) {
+    for (int k=0; k < (*_matrix).outerSize(); ++k) {
+        for (Eigen::SparseMatrix<int, RowMajor>::InnerIterator it(*_matrix, k); it; ++it) {
             std::cout << "(" << it.row() << ","; // row index
             std::cout << it.col() << ")\t"; // col index (here it is equal to k)
         }

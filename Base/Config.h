@@ -14,46 +14,32 @@ using namespace std;
 
 class Config {
 public:
-    string metapath_;
-    string nodes_dir_;
-    string relations_dir_;
-    string constraints_file_;
-    string query_file_;
-    algorithm_type algo_;
-    bool adaptive_ { false };
-    int max_memory_ { 0 };
-    string output_dir_;
-    algorithm_type otree_expansion_;
+    string _nodes_dir;
+    string _relations_file;
+    string _constraints_file;
+    string _query_file;
+    algorithm_type _algo;
+    string _output_file;
 
     void setQueryFile(const string &query_file);
 
     void setNodesDir(const string &nodes_dir);
 
-    void setRelationsDir(const string &relations_dir);
+    void setRelationsFile(const string &relations_file);
 
     void setConstraintsFile(const string &constraints_file);
 
     void setAlgorithm(algorithm_type algo);
 
-    void setAdaptive(bool adaptive);
-
-    void setMaxMemory(int max_memory);
-
-    void setOTreeExpansion(algorithm_type expansion);
-
     void printArgs();
 
-    void printOutputDir(string output_dir);
-
-    void setMetapath(const string &metapath);
-
-    const string &getMetapath() const;
+    void setOutputFile(string output_dir);
 
     string getAlgorithm() const;
 
     const string &getQueryFile() const;
 
-    algorithm_type getOtreeExpansion() const;
+    const string &getRelationsFile() const;
 };
 
 

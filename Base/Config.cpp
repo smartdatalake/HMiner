@@ -10,71 +10,49 @@
 #include "../Utils.h"
 
 void Config::setQueryFile(const string &query_file) {
-    query_file_ = query_file;
+    _query_file = query_file;
 }
 
 const string &Config::getQueryFile() const {
-    return query_file_;
+    return _query_file;
+}
+
+const string &Config::getRelationsFile() const {
+    return this->_relations_file;
 }
 
 void Config::setNodesDir(const string &nodes_dir) {
-    nodes_dir_ = nodes_dir;
+    _nodes_dir = nodes_dir;
 }
 
-void Config::setRelationsDir(const string &relations_dir) {
-    relations_dir_ = relations_dir;
+void Config::setRelationsFile(const string &relations_file) {
+    _relations_file = relations_file;
 }
 
 void Config::printArgs() {
     std::cout
-        << "Metapath: " << metapath_ << endl
-        << "Nodes dir: " << nodes_dir_ << endl
-        << "Relations dir: " << relations_dir_ << endl
-        << "Constraints file: " << constraints_file_ << endl << endl;
+        << "Nodes dir: " << _nodes_dir << endl
+        << "Relations dir: " << _relations_file << endl
+        << "Constraints file: " << _constraints_file << endl << endl;
 }
 
 void Config::setConstraintsFile(const string &constraints_file) {
-    constraints_file_ = constraints_file;
+    _constraints_file = constraints_file;
 }
 
 
 void Config::setAlgorithm(algorithm_type algo) {
-    algo_ = algo;
+    _algo = algo;
 }
 
-void Config::setOTreeExpansion(algorithm_type expansion) {
-    otree_expansion_ = expansion;
-
-}
-
-void Config::setAdaptive(bool adaptive) {
-    adaptive_ = adaptive;
-}
-
-void Config::setMaxMemory(int max_memory) {
-    max_memory_ = max_memory;
-}
-
-void Config::printOutputDir(string output_dir) {
-    output_dir_ = output_dir;
-}
-
-const string &Config::getMetapath() const {
-    return metapath_;
+void Config::setOutputFile(string output_dir) {
+    _output_file = output_dir;
 }
 
 string Config::getAlgorithm() const {
-    switch (Config::algo_) {
+    switch (Config::_algo) {
         case algorithm_type::Seq:   return "Seq";
         case algorithm_type::DynP:   return "DynP";
         default:      return "Unknown";
     }
-}
-
-void Config::setMetapath(const string &metapath) {
-    metapath_ = metapath;
-}
-
-algorithm_type Config::getOtreeExpansion() const {
-    return otree_expansion_;
 }
