@@ -45,8 +45,8 @@ void Config::setAlgorithm(algorithm_type algo) {
     _algo = algo;
 }
 
-void Config::setOutputFile(string output_dir) {
-    _output_file = output_dir;
+void Config::setOutputFile(string output_file) {
+    _output_file = output_file;
 }
 
 string Config::getAlgorithm() const {
