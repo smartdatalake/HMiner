@@ -7,7 +7,7 @@
 
 #include <string>
 //#include <boost/numeric/ublas/matrix_sparse.hpp>
-#include "../ext_libs/Eigen/Sparse"
+#include "../libs/Eigen/Sparse"
 
 using namespace std;
 using namespace Eigen;

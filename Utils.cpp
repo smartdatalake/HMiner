@@ -8,8 +8,7 @@
 #include <boost/algorithm/string.hpp>
 #include <boost/numeric/ublas/matrix_sparse.hpp>
 #include "Utils.h"
-//#include "Eigen/src/SparseCore/SparseMatrix.h"
-#include "./ext_libs/Eigen/Sparse"
+#include "./libs/Eigen/Sparse"
 
 using namespace std;
 

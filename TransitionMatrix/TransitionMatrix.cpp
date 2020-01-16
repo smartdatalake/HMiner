@@ -12,7 +12,7 @@
     #include <wait.h>
 #endif
 #include "TransitionMatrix.h"
-#include "../ext_libs/Eigen/Sparse"
+#include "../libs/Eigen/Sparse"
 #include "../Utils.h"
 
 using namespace std;

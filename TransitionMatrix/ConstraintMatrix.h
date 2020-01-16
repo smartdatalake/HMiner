@@ -6,7 +6,7 @@
 #define HRANK_CONSTRAINTMATRIX_H
 
 #include <boost/numeric/ublas/matrix_sparse.hpp>
-#include "../ext_libs/Eigen/Sparse"
+#include "../libs/Eigen/Sparse"
 #include <string>
 #include <map>
 
@@ -19,13 +19,13 @@ class ConstraintMatrix {
 private:
     string node_name_;
     string node_data_file_;
-    map<string, string> constraints_;
     int dimension_;
 
     SparseMatrix<int, RowMajor> *_matrix;
 public:
-    ConstraintMatrix(string node_name, string node_data_file, map<string, string> constraints, int dimension)
-     : node_name_(node_name), node_data_file_ (node_data_file), constraints_ (constraints), dimension_ (dimension) {
+    ConstraintMatrix(string node_name, string node_data_file, int dimension)
+     : node_name_(node_name), node_data_file_ (node_data_file), dimension_ (dimension) {
+         cout << dimension << endl;
          this->_matrix = new SparseMatrix<int, RowMajor>(dimension, dimension);
      }
 

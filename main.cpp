@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstring>
-#include "./ext_libs/Eigen/Sparse"
+#include "./libs/Eigen/Sparse"
 
 #include "Utils.h"
 #include "Base/Executor.h"
