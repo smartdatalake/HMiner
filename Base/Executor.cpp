@@ -4,79 +4,89 @@
 #include <fstream>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string.hpp>
-#include<unordered_map>
+#include <unordered_map>
+#include <string>
 #include "Executor.h"
 #include "../TransitionMatrix/TransitionMatrix.h"
 #include "../HRank/HRankSY.h"
+#include "../includes/csv-filter/dsv_filter.hpp"
+// #include "strtk.hpp"
 
 using namespace Eigen;
 
 Executor::Executor(Config* config) : _config(config) {}
 
-void Executor::read_constraints() {
-    istream *infile = new ifstream(this->_config->_constraints_file);
-
-    string line;
-
-    while (getline(*infile, line)) {
-        vector<string> tokens;
-        boost::split(tokens, line, boost::is_any_of("\t"));
-
-        auto it = _constraints.find(tokens[0]);
-
-        // this node has already assigned constraints
-        if (it != _constraints.end()) {
-            it->second.insert(make_pair(tokens[1], tokens[2]));
-
-            // node was not found, so insert that node with its constraint
-        } else {
-            map<string, string> filter_map;
-            filter_map.insert(make_pair(tokens[1], tokens[2]));
-            _constraints.insert(make_pair(tokens[0], filter_map));
-        }
-    }
-    delete infile;
-}
-
-map<string, ConstraintMatrix*> Executor::build_constraint_matrices(string metapath, vector<int> *dimensions) {
+map<string, ConstraintMatrix*> Executor::build_constraint_matrices(string metapath, vector<int> *dimensions, tuple<string, string, string> constraint) {
     map<string, ConstraintMatrix*> constraint_matrices;
 
-    // get max id values && read constraint matrices
-    for(unsigned int i=0; i<metapath.size(); i++) {
+Utils::printConstraint(constraint);
+string node_name = "A";
+string node_data_file = this->_config->_nodes_dir + node_name + ".csv";
+cout << node_data_file << endl;
 
-        // convert char to string
-        string node_name(1, metapath[i]);
+clock_t begin = clock();
+        dsv_filter filter;
+        filter.set_input_delimiter("\t");
 
-        // find dimension of the constraint table
-        string node_data_file = this->_config->_nodes_dir + node_name + ".csv";
-        int id_idx = Utils::get_column_idx(node_data_file, "id");
-        int dim = Utils::get_max_column_value(node_data_file, id_idx) + 1;
+        if (!filter.load(node_data_file)) {
+            cout << "DE MPOREI" << endl;
+        } else {
 
-        dimensions->push_back(dim);
+            cout << "TIME: " << (clock() - begin) / CLOCKS_PER_SEC << endl;
 
-        // if constraint matrix for this node type
-        // is already created, then continue
-        auto mit = constraint_matrices.find(node_name);
-        if (mit != constraint_matrices.end())
-            continue;
-
-        // if constraints are given for this node type
-        // then create constraint matrix
-        auto it = _constraints.find(node_name);
-
-        if (it != _constraints.end()) {
-
-            ConstraintMatrix *matrix = new ConstraintMatrix(node_name, node_data_file, it->second, dim);
-
-            matrix->build();
-            //matrix.print_constraints();
-            //matrix.print();
-
-            constraint_matrices.insert(make_pair(node_name, matrix));
         }
-    }
+    
+std::string expression = "(id == 1)";
 
-    return constraint_matrices;
+   filter.add_filter(expression);
+
+   for (std::size_t row = 1; row < filter.row_count(); ++row)
+   {
+
+      if (dsv_filter::e_match == filter[row])
+      {
+          cout << "ΕΔΩ" << row << endl;
+          // do something with row...
+      }
+   }
+
+
+    // // get max id values && read constraint matrices
+    // for(unsigned int i=0; i<metapath.size(); i++) {
+
+    //     // convert char to string
+    //     string node_name(1, metapath[i]);
+
+    //     // find dimension of the constraint table
+    //     string node_data_file = this->_config->_nodes_dir + node_name + ".csv";
+    //     int id_idx = Utils::get_column_idx(node_data_file, "id");
+    //     int dim = Utils::get_max_column_value(node_data_file, id_idx) + 1;
+
+    //     dimensions->push_back(dim);
+
+    //     // if constraint matrix for this node type
+    //     // is already created, then continue
+    //     auto mit = constraint_matrices.find(node_name);
+    //     if (mit != constraint_matrices.end())
+    //         continue;
+
+    //     // if constraints are given for this node type
+    //     // then create constraint matrix
+    //     auto it = _constraints.find(node_name);
+
+    //     if (it != _constraints.end()) {
+
+    //         ConstraintMatrix *matrix = new ConstraintMatrix(node_name, node_data_file, it->second, dim);
+
+    //         matrix->build();
+    //         //matrix.print_constraints();
+    //         //matrix.print();
+
+    //         constraint_matrices.insert(make_pair(node_name, matrix));
+    //     }
+    // }
+
+    // return constraint_matrices;
 }
 
 void Executor::delete_constraint_matrices(map<string, ConstraintMatrix *> constraint_matrices) {
@@ -103,6 +113,9 @@ vector<TransitionMatrix*> Executor::build_transition_matrices(string metapath, v
         cerr << "Error: No valid input relations file given" << endl;
         exit(EXIT_FAILURE);
     }
+
+    char buffer[65536];
+    relations_fd.rdbuf()->pubsetbuf(buffer, sizeof(buffer));
 
     // read relations file and keep triplets for each matrix
     string line;
@@ -187,22 +200,25 @@ void Executor::write_results_to_file(TransitionMatrix* result, string metapath) 
 
 void Executor::batch_run() {
 
-    this->read_constraints();
-
     HRankSY* hrank = new HRankSY(this->_config);
 
     istream *infile = new ifstream(this->_config->_query_file);
 
-    string metapath;
+    string query_line;
 
     // execute all queries of query file
-    while (getline(*infile, metapath)) {
-        
-        Utils::log("Process metapath: " + metapath + "\n");
+    while (getline(*infile, query_line)) {
+
+        string metapath;
+        tuple<string, string, string> constraint;
+cout << "edw" << endl;
+        Utils::getMetapathAndConstraints(query_line, metapath, constraint);
+cout << "Edw@" << endl;
+        Utils::log("Process metapath: " + query_line + "\n");
         Utils::log("Building constraint matrices.");
 clock_t begin = clock();
         vector<int> dimensions;
-        map<string, ConstraintMatrix*> constraint_matrices = build_constraint_matrices(metapath, &dimensions);
+        map<string, ConstraintMatrix*> constraint_matrices = this->build_constraint_matrices(metapath, &dimensions, constraint);
 Utils::logTime(begin);
 
         Utils::log("Building transition matrices.");
@@ -219,7 +235,7 @@ begin = clock();
         TransitionMatrix* result = nullptr;
 
         if (algorithm == algorithm_type::Seq || algorithm == algorithm_type::DynP) {
-            result = hrank->run(metapath, matrices, dimensions);
+            result = hrank->run(query_line, matrices, dimensions);
         } else {
             cout << "ERROR: Unknown algorithm given" << endl;
             return;
@@ -228,7 +244,7 @@ Utils::logTime(begin);
 
 Utils::log("Writing result to output file.");
 begin = clock();
-        this->write_results_to_file(result, metapath);
+        this->write_results_to_file(result, query_line);
 Utils::logTime(begin);
 
         delete result;

@@ -21,7 +21,10 @@ public:
     static void print(Eigen::SparseMatrix<int, RowMajor> *matrix_);
     static void log(string msg);
     static void logTime(clock_t begin);
-
+    static void split(string line, vector<string> &tokens, char delim);
+    static void getMetapathAndConstraints(string query_line, string &metapath, tuple<string, string, string> &constraint);
+    static void printConstraint(tuple<string, string, string> constraint);
+    
     // TODO: merge two functions below (templates?)
     static vector<TransitionMatrix*> slice(vector<TransitionMatrix*> matrices, size_t start, size_t len);
     static vector<int> slice(vector<int> matrices, size_t start, size_t len);

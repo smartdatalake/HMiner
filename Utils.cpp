@@ -131,3 +131,39 @@ vector<TransitionMatrix*> Utils::slice(vector<TransitionMatrix*> matrices, size_
 vector<int> Utils::slice(vector<int> matrices, size_t start, size_t len) {
     return vector<int>(matrices.begin() + start, matrices.begin() + start + len);
 }
+
+void Utils::split(string line, vector<string> &tokens, char delim) {
+    std::istringstream iss(line);
+    std::string token;
+    while(std::getline(iss, token, delim)) {
+        tokens.push_back(token);
+    }
+}
+
+void Utils::getMetapathAndConstraints(string query_line, string &metapath, tuple<string, string, string> &constraint) {
+
+    vector<string> parts;
+
+    Utils::split(query_line, parts, '\t');
+    metapath = parts[0];
+
+    vector<string> c_parts;
+    Utils::split(parts[1], c_parts, '=');
+    string val = c_parts[1];
+
+    // remove double quotes from value
+    val.erase(
+            remove( val.begin(), val.end(), '\"' ),
+            val.end()
+    );
+
+    vector<string> cc_parts;
+    Utils::split(c_parts[0], cc_parts, '.');
+    string obj = cc_parts[0];
+    string pred = cc_parts[1];
+    constraint = make_tuple(obj, pred, val);
+}
+
+void Utils::printConstraint(tuple<string, string, string> constraint) {
+    cout << "\t-\t[ C: " << get<0>(constraint) << ", P: " << get<1>(constraint) << ", V: " << get<2>(constraint) << " ]";
+}

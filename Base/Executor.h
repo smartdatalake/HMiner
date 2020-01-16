@@ -20,8 +20,7 @@ public:
 
     void batch_run();
 
-    void read_constraints();
-    map<string, ConstraintMatrix *> build_constraint_matrices(string metapath, vector<int> *dimensions);
+    map<string, ConstraintMatrix *> build_constraint_matrices(string metapath, vector<int> *dimensions, tuple<string, string, string> constraint);
     void delete_constraint_matrices(map<string, ConstraintMatrix *> constraint_matrices);
     vector<TransitionMatrix*> build_transition_matrices(string metapath, vector<int> dimensions, map<string, ConstraintMatrix*> constraint_matrices);
     void write_results_to_file(TransitionMatrix* result, string metapath);
