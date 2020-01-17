@@ -6,8 +6,7 @@
 #define HRANK_TRANSITIONMATRIX_H
 
 #include <string>
-//#include <boost/numeric/ublas/matrix_sparse.hpp>
-#include "../libs/Eigen/Sparse"
+#include "../libs/eigen/Eigen/Sparse"
 
 using namespace std;
 using namespace Eigen;
@@ -56,7 +55,7 @@ public:
     long double nonZeros() const;
 
     void write(ofstream &fd, SparseMatrix<int, RowMajor> *tmp_result);
-
+    void writeForPagerank(ofstream &fd, Eigen::SparseMatrix<int, RowMajor> *tmp_result);
 };
 
 

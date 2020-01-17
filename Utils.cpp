@@ -6,7 +6,6 @@
 #include <fstream>
 #include <sstream>
 #include "Utils.h"
-#include "./libs/Eigen/Sparse"
 
 using namespace std;
 
@@ -16,18 +15,14 @@ void Utils::usage() {
          << "    query file that contains the metapaths to be used" << endl
          << " -indir nodes_dir" << endl
          << "    directory with node data files" << endl
-         << " -idir relations_file" << endl
-         << "    directory with relations files" << endl
-         << " -c constraints_file" << endl
-         << "    file with node constraints" << endl
+         << " -irdir relations_dir" << endl
+         << "    directory with relation files" << endl
+         << " -irf constraints_file" << endl
+         << "    file containing all relations" << endl
          << " -algo algorithm to be used" << endl
          << "    available algorithms: { 'Seq', 'DynP' }" << endl
-         << " -ad adaptive matrix multiplication (disk based)" << endl
-         << "    values : {0, 1}" << endl
-         << " -mem total memory to be used in case of adaptive matrix mulitplication" << endl
-         << "    total memory in MB" << endl
-         << " -out output directory" << endl
-         << "    if not given results are printed on stdout" << endl;
+         << " -out output file" << endl
+         << "    file to write results" << endl;
 }
 
 int Utils::checkArg(int i, int max) {

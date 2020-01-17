@@ -91,15 +91,22 @@ int Executor::buildTransitionMatrices(string metapath, vector<int> dimensions, m
         string relation = metapath.substr(i, 2);
         if (matrices_map.find(relation) == matrices_map.end()) {
             auto* tm = new TransitionMatrix(relation, dimensions[i], dimensions[i+1]);
-            if (tm->build(this->_config->_relations_dir)) {
-                cerr << "Error building transition matrix for relation " << relation << endl;
-                return -1;
-            }
 
-            // if (tm->buildFromSingleFile(this->_config->getRelationsFile())) {
-            //     cerr << "Error building transition matrix for relation " << relation << endl;
-            //     return -1;
-            // }
+            // if dir containing relation files is given (relations are loaded faster)
+            if (!this->_config->_relations_dir.empty()) {
+                if (tm->build(this->_config->_relations_dir)) {
+                    cerr << "Error building transition matrix for relation " << relation << endl;
+                    return -1;
+                }
+            
+            // else use relations file
+            } else {
+
+                if (tm->buildFromSingleFile(this->_config->getRelationsFile())) {
+                    cerr << "Error building transition matrix for relation " << relation << endl;
+                    return -1;
+                }
+            }
 
             matrices_map.emplace(relation, tm);
             cout << "* relations(" << relation << ") = " << tm->nonZeros() << endl;
@@ -154,10 +161,9 @@ int Executor::buildTransitionMatrices(string metapath, vector<int> dimensions, m
 int Executor::write(TransitionMatrix* result, string outfile) {
 
     ofstream fd = ofstream(outfile);
-    result->write(fd, result->getMatrix());
+    result->writeForPagerank(fd, result->getMatrix());
     fd.close();
-    string sort_cmd = "/usr/bin/sort -k1,1 -k2,2 -n -o" + outfile + " " + outfile;
-    return system(sort_cmd.c_str());
+    return 0;
 }
 
 void Executor::run() {
@@ -174,7 +180,7 @@ void Executor::run() {
         cerr << "Error: Cannot read matrix dimensions from input files" << endl;
         exit(EXIT_FAILURE);
     }
-    
+
     Utils::log("Matrix Dimensions calculated in " + to_string(Utils::diffTime(begin)) + " sec");
 
     // if constraints are given, build constraint matrices

@@ -8,3 +8,6 @@
 [submodule "libs/json-parser"]
 	path = libs/json-parser
 	url = https://github.com/nlohmann/json.git
+[submodule "libs/eigen"]
+	path = libs/eigen
+	url = https://gitlab.com/libeigen/eigen.git
