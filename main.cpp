@@ -11,7 +11,8 @@ using namespace Eigen;
 
 const char *QUERY_FILE = "-qf";
 const char *NODES_DIR = "-indir";
-const char *RELATIONS_FILE = "-irdir";
+const char *RELATIONS_FILE = "-irf";
+const char *RELATIONS_DIR = "-irdir";
 const char *CONSTRAINTS_FILE_ARG = "-c";
 const char *ALGORITHM = "-algo";
 const char *OUTPUT_FILE = "-out";
@@ -34,7 +35,11 @@ int main(int argc, char* argv[]) {
         } else if (!strcmp(argv[i], RELATIONS_FILE)) {
             i = Utils::checkArg(i, argc);
             config.setRelationsFile(argv[i]);
-
+        
+        } else if (!strcmp(argv[i], RELATIONS_DIR)) {
+            i = Utils::checkArg(i, argc);
+            config.setRelationsDir(argv[i]);
+            
         } else if (!strcmp(argv[i], CONSTRAINTS_FILE_ARG)) {
             i = Utils::checkArg(i, argc);
             config.setConstraintsFile(argv[i]);

@@ -1,6 +1,6 @@
 {
     "metapath": "APCPAP", 
     "constraints": {
-        "A": "name = 'Thanasis Vergoulis'"
+        "A": "id < 200"
     }
 }

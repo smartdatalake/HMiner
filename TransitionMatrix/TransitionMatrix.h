@@ -40,6 +40,7 @@ public:
     ~TransitionMatrix() { delete _matrix; }
 
     int build(string relations_file);
+    int buildFromSingleFile(string relations_file);
     
     SparseMatrix<int, RowMajor>* getMatrix() const;
 

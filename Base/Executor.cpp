@@ -41,7 +41,6 @@ int Executor::buildConstraintMatrices(json query, vector<int> *dimensions, map<s
             // check for empty constraint string
             Utils::trim(expression);
             if (expression.empty()) {
-                cout << " edw" << endl;
                 continue;
             }
 
@@ -92,10 +91,15 @@ int Executor::buildTransitionMatrices(string metapath, vector<int> dimensions, m
         string relation = metapath.substr(i, 2);
         if (matrices_map.find(relation) == matrices_map.end()) {
             auto* tm = new TransitionMatrix(relation, dimensions[i], dimensions[i+1]);
-            if (tm->build(this->_config->getRelationsFile())) {
+            if (tm->build(this->_config->_relations_dir)) {
                 cerr << "Error building transition matrix for relation " << relation << endl;
                 return -1;
             }
+
+            // if (tm->buildFromSingleFile(this->_config->getRelationsFile())) {
+            //     cerr << "Error building transition matrix for relation " << relation << endl;
+            //     return -1;
+            // }
 
             matrices_map.emplace(relation, tm);
             cout << "* relations(" << relation << ") = " << tm->nonZeros() << endl;

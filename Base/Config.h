@@ -16,6 +16,7 @@ class Config {
 public:
     string _nodes_dir;
     string _relations_file;
+    string _relations_dir;
     string _constraints_file;
     string _query_file;
     algorithm_type _algo;
@@ -31,6 +32,8 @@ public:
 
     void setAlgorithm(algorithm_type algo);
 
+    void setRelationsDir(const string &relations_dir); 
+
     void printArgs();
 
     void setOutputFile(string output_dir);
@@ -40,6 +43,9 @@ public:
     const string &getQueryFile() const;
 
     const string &getRelationsFile() const;
+
+    const string &getRelationsDir() const;
+
 };
 
 

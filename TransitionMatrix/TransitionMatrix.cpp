@@ -19,7 +19,7 @@
 using namespace std;
 using namespace Eigen;
 
-int TransitionMatrix::build(string relations_file) {
+int TransitionMatrix::buildFromSingleFile(string relations_file) {
 
     dsv_filter filter;
     filter.set_input_delimiter("\t");
@@ -97,4 +97,44 @@ int TransitionMatrix::rows() const {
 
 int TransitionMatrix::cols() const {
     return _cols;
+}
+
+int TransitionMatrix::build(string relations_dir) {
+
+    std::vector< Eigen::Triplet<int> > tripletList;
+    string relations_file = relations_dir + this->_relation + ".crs";
+    ifstream infile(relations_file);
+
+    if (!infile.good()) {
+        return -1;
+    }
+
+    string line;
+
+    while (getline(infile, line)) {
+
+        int i = 0;
+        int src = -1, dest = -1, val = 1;
+        std::istringstream iss(line);
+
+        while (getline(iss, line, '\t')) {
+            if (i == 0) {
+                src = strtol(line.c_str(), nullptr, 10);
+            } else if (i == 1){
+                dest = strtol(line.c_str(), nullptr, 10);
+            } else if (i == 2) {
+                val = strtol(line.c_str(), nullptr, 10);
+            }
+            i++;
+        }
+
+        tripletList.emplace_back(src, dest, val);
+    }
+
+    this->_matrix->setFromTriplets(tripletList.begin(), tripletList.end());
+    this->_matrix->makeCompressed();
+
+    infile.close();
+    
+    return 0;
 }
