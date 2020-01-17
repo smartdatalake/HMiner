@@ -32,24 +32,30 @@ public:
     TransitionMatrix(string relation, SparseMatrix<int, RowMajor> *matrix, int rows, int cols)
         :  _relation(relation), _matrix(matrix), _rows(rows), _cols(cols) {}
 
+    TransitionMatrix(const TransitionMatrix *that)
+        : _relation(that->getRelation()), _rows(that->rows()), _cols(that->cols()) {
+        this->_matrix = new SparseMatrix<int, RowMajor>(*(that->getMatrix()));
+    }
+    
     ~TransitionMatrix() { delete _matrix; }
 
-    SparseMatrix<int, RowMajor>* get_matrix() const;
+    int build(string relations_file);
+    
+    SparseMatrix<int, RowMajor>* getMatrix() const;
 
-    const string &get_relation() const;
+    const string &getRelation() const;
 
     double read();
     void print();
 
     static TransitionMatrix* dot(TransitionMatrix *a, TransitionMatrix *b);
 
-    int get_rows() const;
+    int rows() const;
+    int cols() const;
+    long double nonZeros() const;
 
-    int get_cols() const;
+    void write(ofstream &fd, SparseMatrix<int, RowMajor> *tmp_result);
 
-    void write_to_file(ofstream &fd, SparseMatrix<int, RowMajor> *tmp_result);
-
-    void createFromTriplets(vector<Triplet<int>>* triplets);
 };
 
 

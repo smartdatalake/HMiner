@@ -1,1 +1,6 @@
-APPA	P.year="2017"
+{
+    "metapath": "APCPAP", 
+    "constraints": {
+        "A": "name = 'Thanasis Vergoulis'"
+    }
+}

@@ -14,7 +14,8 @@ run: main.o \
 	TransitionMatrix/TransitionMatrix.o \
 	MatrixMultiplier/DynamicOptimizer.o \
 	Base/Executor.o \
-	MatrixMultiplier/MatrixMultiplier.o
+	MatrixMultiplier/MatrixMultiplier.o \
+	Base/FileParser.o
 	
 	$(CXX) -o $@ $^ -L BaseAlgorithm/ -L TransitionMatrix/ $(CXXFLAGS)
 

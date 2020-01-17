@@ -17,16 +17,14 @@
 using namespace std;
 using namespace Eigen;
 
-void ConstraintMatrix::build() {
+int ConstraintMatrix::build(string expression) {
 
     dsv_filter filter;
     filter.set_input_delimiter("\t");
 
-    if (!filter.load(this->node_data_file_)) {
-        cout << "Could not open" << endl;
+    if (!filter.load(this->_node_data_file)) {
+        return -1;
     }
-    
-    string expression = "(year >= 2017)";
 
     filter.add_filter(expression);
 
@@ -46,13 +44,15 @@ void ConstraintMatrix::build() {
 
     this->_matrix->setFromTriplets(triplet_list.begin(), triplet_list.end());
     this->_matrix->makeCompressed();
+
+    return 0;
 }
 
-int ConstraintMatrix::get_dimension() const {
-    return dimension_;
+int ConstraintMatrix::getDimension() const {
+    return _dimension;
 }
 
-SparseMatrix<int, RowMajor>* ConstraintMatrix::get_matrix() const {
+SparseMatrix<int, RowMajor>* ConstraintMatrix::getMatrix() const {
     return _matrix;
 }
 
@@ -63,4 +63,8 @@ void ConstraintMatrix::print() {
             std::cout << it.col() << ")\t"; // col index (here it is equal to k)
         }
     }
+}
+
+long double ConstraintMatrix::nonZeros() const {
+    return this->_matrix->nonZeros();
 }

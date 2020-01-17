@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
     #endif
 
     Executor* exec = new Executor(&config);
-    exec->batch_run();
+    exec->run();
     delete exec;
 
     return 0;
