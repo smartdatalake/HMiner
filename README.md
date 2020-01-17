@@ -51,7 +51,7 @@ make
 All the algorithms can be executed with the following command: 
 
 ```
-./run -qf <query_file> -indir <input_node_directory> -idir <input_relations_directory> -c <constraints_file> -algo <algorithm> -ad <adaptive_mode> -mem <max_memory> -out <output_directory>
+./run -qf <query_file> -indir <input_node_directory> -irdir <input_relations_directory> -algo <algorithm>  -out <output_file>
 ```
 
 Parameters are explained in the table below:
@@ -67,7 +67,7 @@ Parameters are explained in the table below:
 
 An example execution command can be the following: 
 ```
-./run -qf data/synthetic_data/queries.txt -indir data/DBLP_sample_dense/nodes/ -irdir data/DBLP_sample_dense/relations/ -algo DynP -out data/out/outfile.csv
+./run -qf data/DBLP_sample_dense/queries.txt -indir data/DBLP_sample_dense/nodes/ -irdir data/DBLP_sample_dense/relations/ -algo DynP -out data/out/outfile.csv
 ```
 
 It executes the `DynP` algorithm for the metapath query in the file specified by the `-qf` flag.
