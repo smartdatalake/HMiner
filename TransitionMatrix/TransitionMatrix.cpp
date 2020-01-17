@@ -12,7 +12,6 @@
     #include <wait.h>
 #endif
 #include "TransitionMatrix.h"
-#include "../libs/Eigen/Sparse"
 #include "../Utils.h"
 #include "../libs/csv-filter/dsv_filter.hpp"
 
@@ -83,9 +82,35 @@ TransitionMatrix* TransitionMatrix::dot(TransitionMatrix *a, TransitionMatrix *b
     return new TransitionMatrix(res_relation, result, result->rows(), result->cols());
 }
 
+void TransitionMatrix::writeForPagerank(ofstream &fd, Eigen::SparseMatrix<int, RowMajor> *tmp_result) {
+    long double initial_score = 1.0 / tmp_result->rows();
+
+    for (int key=0; key < tmp_result->rows(); ++key) {
+
+        string values;
+        int length = 0;
+        for (Eigen::SparseMatrix<int, RowMajor>::InnerIterator it(*tmp_result, key); it; ++it) {
+            
+            if (!values.empty()) {
+                values += ",";
+            }
+
+            values += to_string(it.col());
+            length++;
+        }
+
+        if (values.empty()){
+            values = "0";
+        }
+
+        fd << key << "\t" << values << "|" << length << "|" << initial_score << "\t0\t0" << "\n";
+    }   
+}
+
 void TransitionMatrix::write(ofstream &fd, Eigen::SparseMatrix<int, RowMajor> *tmp_result) {
-    for (int k=0; k < (*tmp_result).outerSize(); ++k) {
-        for (Eigen::SparseMatrix<int, RowMajor>::InnerIterator it(*tmp_result, k); it; ++it) {
+
+    for (int i=0; i < (*tmp_result).rows(); ++i) {
+        for (Eigen::SparseMatrix<int, RowMajor>::InnerIterator it(*tmp_result, i); it; ++it) {
             fd << it.row() << "\t" << it.col() << "\t" << it.value() << "\n";
         }
     }

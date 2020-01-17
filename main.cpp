@@ -1,7 +1,5 @@
 #include <iostream>
 #include <cstring>
-#include "./libs/Eigen/Sparse"
-
 #include "Utils.h"
 #include "Base/Executor.h"
 #include "Base/Config.h"

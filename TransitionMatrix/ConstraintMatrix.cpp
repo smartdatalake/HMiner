@@ -11,7 +11,6 @@
 
 #include "ConstraintMatrix.h"
 #include "../Utils.h"
-#include "../libs/Eigen/Sparse"
 #include "../libs/csv-filter/dsv_filter.hpp"
 
 using namespace std;
