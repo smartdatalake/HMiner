@@ -1,1 +1,6 @@
-APPA
+{
+    "metapath": "APC", 
+    "constraints": {
+        "A": "id < 200"
+    }
+}

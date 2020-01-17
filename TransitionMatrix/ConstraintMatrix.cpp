@@ -11,76 +11,49 @@
 
 #include "ConstraintMatrix.h"
 #include "../Utils.h"
-#include "../ext_libs/Eigen/Sparse"
+#include "../libs/Eigen/Sparse"
+#include "../libs/csv-filter/dsv_filter.hpp"
 
 using namespace std;
 using namespace Eigen;
 
-void ConstraintMatrix::build() {
+int ConstraintMatrix::build(string expression) {
+
+    dsv_filter filter;
+    filter.set_input_delimiter("\t");
+
+    if (!filter.load(this->_node_data_file)) {
+        return -1;
+    }
+
+    filter.add_filter(expression);
+
+    vector<bool> selected_column_list(filter.column_count(), false);
+    selected_column_list[0] = true;
 
     std::vector<Triplet<int>> triplet_list;
+    for (std::size_t row = 1; row < filter.row_count(); ++row) {
 
-    map<int, string> field_constraints;
-
-    // map constraints to column indexes
-    for(auto it = constraints_.cbegin(); it != constraints_.cend(); ++it) {
-        int column_idx = Utils::get_column_idx(node_data_file_, it->first);
-        field_constraints.insert(make_pair(column_idx, it->second));
-    }
-
-    int id_idx = Utils::get_column_idx(node_data_file_, "id");
-
-    ifstream infile(node_data_file_);
-
-    if (infile.good()) {
-        string line;
-
-        while (getline(infile, line)) {
-
-            bool valid = true;
-
-            int i = 0;
-            int id = -1;
-            std::istringstream iss(line);
-            while (getline(iss, line, '\t')) {
-                if (id_idx == i) {
-                    id = strtol(line.c_str(), nullptr, 10);
-                }
-
-                auto it = field_constraints.find(i);
-                if (it != field_constraints.end()) {
-                    if (it->second.compare(line)) {
-                        valid = false;
-                        break;
-                    }
-                }
-                i++;
-
-            }
-
-            if (valid) {
-                triplet_list.emplace_back(id, id, 1);
-            }
+        if (dsv_filter::e_match == filter[row]) {
+            string id_str;
+            filter.row(row, selected_column_list, id_str);
+            int id = stoi(id_str);
+            triplet_list.emplace_back(id, id, 1);
         }
-
-        this->_matrix->setFromTriplets(triplet_list.begin(), triplet_list.end());
     }
 
-    infile.close();
+    this->_matrix->setFromTriplets(triplet_list.begin(), triplet_list.end());
+    this->_matrix->makeCompressed();
+
+    return 0;
 }
 
-int ConstraintMatrix::get_dimension() const {
-    return dimension_;
+int ConstraintMatrix::getDimension() const {
+    return _dimension;
 }
 
-SparseMatrix<int, RowMajor>* ConstraintMatrix::get_matrix() const {
+SparseMatrix<int, RowMajor>* ConstraintMatrix::getMatrix() const {
     return _matrix;
-}
-
-void ConstraintMatrix::print_constraints() {
-    for(auto it = constraints_.cbegin(); it != constraints_.cend(); ++it) {
-        cout << "Constraint on column: " << it->first << " -> " << it->second << endl;
-    }
 }
 
 void ConstraintMatrix::print() {
@@ -90,4 +63,8 @@ void ConstraintMatrix::print() {
             std::cout << it.col() << ")\t"; // col index (here it is equal to k)
         }
     }
+}
+
+long double ConstraintMatrix::nonZeros() const {
+    return this->_matrix->nonZeros();
 }

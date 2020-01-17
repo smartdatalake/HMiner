@@ -1,3 +1,10 @@
 [submodule "PaperRanking"]
 	path = PaperRanking
 	url = https://github.com/schatzopoulos/PaperRanking.git
+	
+[submodule "libs/csv-filter"]
+	path = libs/csv-filter
+	url = https://github.com/ArashPartow/filter.git
+[submodule "libs/json-parser"]
+	path = libs/json-parser
+	url = https://github.com/nlohmann/json.git

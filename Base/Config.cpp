@@ -56,3 +56,12 @@ string Config::getAlgorithm() const {
         default:      return "Unknown";
     }
 }
+
+void Config::setRelationsDir(const string &relations_dir) {
+    this->_relations_dir = relations_dir;
+}
+
+const string & Config::getRelationsDir() const {
+    return this->_relations_dir;
+}
+

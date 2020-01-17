@@ -5,11 +5,8 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
-#include <boost/algorithm/string.hpp>
-#include <boost/numeric/ublas/matrix_sparse.hpp>
 #include "Utils.h"
-//#include "Eigen/src/SparseCore/SparseMatrix.h"
-#include "./ext_libs/Eigen/Sparse"
+#include "./libs/Eigen/Sparse"
 
 using namespace std;
 
@@ -46,21 +43,23 @@ int Utils::get_column_idx(string filename, string fieldName) {
     ifstream infile(filename);
 
     if (infile.good()) {
-        string line;
 
-        // read first line
+        string line, columnName;
+
         getline(infile, line);
+        std::istringstream iss(line);
 
-        vector<string> tokens;
-        boost::split(tokens, line, boost::is_any_of("\t"));
-        for (unsigned int i=0; i<tokens.size(); i++) {
-            if (tokens[i] == fieldName) {
+        int i = 0;
+        while (getline(iss, columnName, '\t')) {
+
+            if (columnName == fieldName) {
                 infile.close();
                 return i;
             }
+            i++;
         }
-        infile.close();
     }
+    infile.close();
     return -1;
 }
 
@@ -116,12 +115,11 @@ void Utils::log(string msg) {
     cout << 1 + ltm->tm_min << ":";
     cout << 1 + ltm->tm_sec << "] ";
 
-    cout << msg;
+    cout << msg << endl;
 }
 
-void Utils::logTime(clock_t begin) {
-    cout << " Time = ";
-    cout << double(clock() - begin) / CLOCKS_PER_SEC << endl;
+double Utils::diffTime(clock_t begin) {
+    return double(clock() - begin) / CLOCKS_PER_SEC;
 }
 
 vector<TransitionMatrix*> Utils::slice(vector<TransitionMatrix*> matrices, size_t start, size_t len) {
@@ -130,4 +128,34 @@ vector<TransitionMatrix*> Utils::slice(vector<TransitionMatrix*> matrices, size_
 
 vector<int> Utils::slice(vector<int> matrices, size_t start, size_t len) {
     return vector<int>(matrices.begin() + start, matrices.begin() + start + len);
+}
+
+void Utils::split(string line, vector<string> &tokens, char delim) {
+    std::istringstream iss(line);
+    std::string token;
+    while(std::getline(iss, token, delim)) {
+        tokens.push_back(token);
+    }
+}
+
+void Utils::printConstraint(tuple<string, string, string> constraint) {
+    cout << "\t-\t[ C: " << get<0>(constraint) << ", P: " << get<1>(constraint) << ", V: " << get<2>(constraint) << " ]";
+}
+
+// trim from start (in place)
+static inline void ltrim(std::string &s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(),
+            std::not1(std::ptr_fun<int, int>(std::isspace))));
+}
+
+// trim from end (in place)
+static inline void rtrim(std::string &s) {
+    s.erase(std::find_if(s.rbegin(), s.rend(),
+            std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+}
+
+// trim from both ends (in place)
+void Utils::trim(std::string &s) {
+    ltrim(s);
+    rtrim(s);
 }

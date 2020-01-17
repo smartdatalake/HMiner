@@ -6,7 +6,7 @@
 #define HRANK_CONSTRAINTMATRIX_H
 
 #include <boost/numeric/ublas/matrix_sparse.hpp>
-#include "../ext_libs/Eigen/Sparse"
+#include "../libs/Eigen/Sparse"
 #include <string>
 #include <map>
 
@@ -17,28 +17,26 @@ typedef Eigen::Triplet<int> T;
 
 class ConstraintMatrix {
 private:
-    string node_name_;
-    string node_data_file_;
-    map<string, string> constraints_;
-    int dimension_;
+    string _node_name;
+    string _node_data_file;
+    int _dimension;
 
     SparseMatrix<int, RowMajor> *_matrix;
 public:
-    ConstraintMatrix(string node_name, string node_data_file, map<string, string> constraints, int dimension)
-     : node_name_(node_name), node_data_file_ (node_data_file), constraints_ (constraints), dimension_ (dimension) {
+    ConstraintMatrix(string node_name, string node_data_file, int dimension)
+     : _node_name(node_name), _node_data_file (node_data_file), _dimension (dimension) {
          this->_matrix = new SparseMatrix<int, RowMajor>(dimension, dimension);
      }
 
     ~ConstraintMatrix() { delete _matrix; }
 
-    void build();
-
-    int get_dimension() const;
-
-    void print_constraints();
+    int build(string expression);
     void print();
 
-    SparseMatrix<int, RowMajor>* get_matrix() const;
+    SparseMatrix<int, RowMajor>* getMatrix() const;
+    long double nonZeros() const;
+    int getDimension() const;
+
 };
 
 
