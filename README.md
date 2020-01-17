@@ -7,10 +7,10 @@ This repository provides open-source implementations of the `Sequential` and `Dy
 
 Input files can be one of the following types:
 
-* **File containing node attributes.** These are tab-separated files containing all node attributes. The first line is the header that contains all attribute names. The first column should be an incremental integer identifier, denoted as "id" in the header. These files should be named with the first letter of the entity they are representing. For example, the file that contains the attributes for node type `Author` should be named `A.csv`. An example of a file containing node attributes is the following: 
+* **File containing node attributes.** These are tab-separated files containing all node attributes. The first line is the header that contains all attribute names. The first column should be an incremental integer identifier, denoted as "id_n" in the header. These files should be named with the first letter of the entity they are representing. For example, the file that contains the attributes for node type `Author` should be named `A.csv`. An example of a file containing node attributes is the following: 
 
 ```
-id	name    surname
+id_n	name_s    surname_s
 0	Makoto  Satoh
 1	Ryo Muramatsu
 ...
@@ -58,21 +58,19 @@ Parameters are explained in the table below:
 
 | Parameter   |      Description      |
 |----------|:-------------:|
-| -qf |  the query file that contains all metapaths to be executed, each in a new line |
+| -qf |  the query file that contains the query to be executed |
 | -indir |    the directory that contains the input files for node attributes    |
-| -idir | teh directory that contains the input files for node relations |
-| -c | a file containing possible constraints for certian node types |
+| -irdir | the directory that contains the input files for node relations (NOTE: give either -irdir or -irf) |
+| -irf | a file that containts all the relations (NOTE: give either -irdir or -irf) |
 | -algo | the algorithm to be used; choose one of `Seq, DynP` |
-| -ad | enable disk-based matrix multiplication, values: 0 or 1 |
-| -mem | max memory to be used when the adapative (disk-based) matrix multiplcation is enabled |
-| -out | the output directory |
+| -out | the file to store the final result |
 
 An example execution command can be the following: 
 ```
-./run -qf data/synthetic_data/queries.txt -indir data/synthetic_data/nodes/ -idir data/synthetic_data/relations/ -c data/constraints.txt -algo DynP -ad 0 -mem 3000 -out data/out/
+./run -qf data/synthetic_data/queries.txt -indir data/DBLP_sample_dense/nodes/ -irdir data/DBLP_sample_dense/relations/ -algo DynP -out data/out/outfile.csv
 ```
 
-It executes the `DynP` algorithm for the metapath queries in the file specified by the `-qf` flag and with the synthetic nodes and dense relations.
+It executes the `DynP` algorithm for the metapath query in the file specified by the `-qf` flag.
 
 #### References
 [1] Y. P. S. W. B. Shi Chuan, Li Yitong. Constrained-meta-path-based rankingin heterogeneous information network. Knowledge and Information Systems, 2016
