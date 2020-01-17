@@ -85,7 +85,7 @@ TransitionMatrix* TransitionMatrix::dot(TransitionMatrix *a, TransitionMatrix *b
 void TransitionMatrix::writeForPagerank(ofstream &fd, Eigen::SparseMatrix<int, RowMajor> *tmp_result) {
     long double initial_score = 1.0 / tmp_result->rows();
 
-    for (int key=0; key < tmp_result->rows(); ++key) {
+    for (int key=1; key < tmp_result->rows(); ++key) {
 
         string values;
         int length = 0;
