@@ -170,7 +170,11 @@ void Executor::run() {
     // calculate dimensions for matrices 
     clock_t begin = clock();
     vector<int> dimensions;
-    FileParser::getMatrixDimensions(query["metapath"], this->_config->_nodes_dir, &dimensions);
+    if (FileParser::getMatrixDimensions(query["metapath"], this->_config->_nodes_dir, &dimensions)) {
+        cerr << "Error: Cannot read matrix dimensions from input files" << endl;
+        exit(EXIT_FAILURE);
+    }
+    
     Utils::log("Matrix Dimensions calculated in " + to_string(Utils::diffTime(begin)) + " sec");
 
     // if constraints are given, build constraint matrices

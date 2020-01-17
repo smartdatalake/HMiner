@@ -11,9 +11,8 @@ using namespace std;
 class FileParser {
 
     public:
-        // static void getMetapathAndConstraints(string query_line, string &metapath, unordered_map<string, string> &constraints);
-        static void getMatrixDimensions(string metapath, string nodes_dir, vector<int> *dimensions);
 
+        static int getMatrixDimensions(string metapath, string nodes_dir, vector<int> *dimensions);
         static json readQuery(string query_file);
 };
 
