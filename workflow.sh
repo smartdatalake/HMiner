@@ -13,5 +13,5 @@ tol="0.00000000001"
 
 make all
 ./run -qf "$query_file" -indir "$nodes_dir" -irdir "$relations_dir" -algo "$algorithm" -out "$hin_file"
-python3 scripts/pagerank.py "$outfile" "$alpha" "$tol" "$ranking_file"
+python3 scripts/pagerank.py "$hin_file" "$alpha" "$tol" "$ranking_file"
 python3 scripts/add_names.py "$names_file" "$ranking_file" "$final_result"
