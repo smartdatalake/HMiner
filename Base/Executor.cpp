@@ -5,11 +5,9 @@
 #include <string>
 #include <unordered_map>
 #include "Executor.h"
-#include "../TransitionMatrix/TransitionMatrix.h"
 #include "../HRank/HRankSY.h"
 #include "FileParser.h"
 
-using json = nlohmann::json;
 using namespace Eigen;
 
 Executor::Executor(Config* config) : _config(config) {}
@@ -161,7 +159,7 @@ int Executor::buildTransitionMatrices(string metapath, vector<int> dimensions, m
 int Executor::write(TransitionMatrix* result, string outfile) {
 
     ofstream fd = ofstream(outfile);
-    result->writeForPagerank(fd, result->getMatrix());
+    result->write(fd, result->getMatrix());
     fd.close();
     return 0;
 }

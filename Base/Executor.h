@@ -5,6 +5,7 @@
 #ifndef HRANK_EXECUTOR_H
 #define HRANK_EXECUTOR_H
 
+#include <iostream>
 #include <unordered_map>
 #include "Config.h"
 #include "../TransitionMatrix/TransitionMatrix.h"
@@ -12,6 +13,7 @@
 #include "../libs/json-parser/single_include/nlohmann/json.hpp"
 
 using json = nlohmann::json;
+using namespace std;
 
 class Executor {
     Config* _config;

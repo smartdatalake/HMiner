@@ -7,7 +7,6 @@
 #include <map>
 #include <fstream>
 #include <sstream>
-#include <boost/numeric/ublas/matrix_sparse.hpp>
 
 #include "ConstraintMatrix.h"
 #include "../Utils.h"

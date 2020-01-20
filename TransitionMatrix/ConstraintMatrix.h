@@ -5,7 +5,6 @@
 #ifndef HRANK_CONSTRAINTMATRIX_H
 #define HRANK_CONSTRAINTMATRIX_H
 
-#include <boost/numeric/ublas/matrix_sparse.hpp>
 #include "../libs/eigen/Eigen/Sparse"
 #include <string>
 #include <map>
