@@ -164,10 +164,7 @@ int Executor::write(TransitionMatrix* result, string outfile) {
     return 0;
 }
 
-void Executor::run() {
-
-    // read & parse query from query file
-    json query = FileParser::readQuery(this->_config->_query_file);
+void Executor::run(json query) {
 
     Utils::log("Process metapath: " + to_string(query["metapath"]));
 

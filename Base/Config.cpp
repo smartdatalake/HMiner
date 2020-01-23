@@ -29,13 +29,6 @@ void Config::setRelationsFile(const string &relations_file) {
     _relations_file = relations_file;
 }
 
-void Config::printArgs() {
-    std::cout
-        << "Nodes dir: " << _nodes_dir << endl
-        << "Relations dir: " << _relations_file << endl
-        << "Constraints file: " << _constraints_file << endl << endl;
-}
-
 void Config::setConstraintsFile(const string &constraints_file) {
     _constraints_file = constraints_file;
 }

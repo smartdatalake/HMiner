@@ -1,7 +1,8 @@
 CXX=g++
 CXXFLAGS+=-Wall -O3 -std=c++14 -DNDEBUG
 
-all: run
+all: run ;
+	cp run workflows/
 
 debug: CXXFLAGS += -g3 -DDEBUG_MSG
 debug: run
@@ -29,3 +30,4 @@ clean:
 	rm TransitionMatrix/*.o
 	rm MatrixMultiplier/*.o
 	rm run
+	rm workflows/run

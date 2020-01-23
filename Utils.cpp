@@ -10,19 +10,7 @@
 using namespace std;
 
 void Utils::usage() {
-    cerr << "run [-qf query_file] [-n nodes_dir] [-r relations_dir] [-co constraints_file] " << endl
-         << " -qf query_file" << endl
-         << "    query file that contains the metapaths to be used" << endl
-         << " -indir nodes_dir" << endl
-         << "    directory with node data files" << endl
-         << " -irdir relations_dir" << endl
-         << "    directory with relation files" << endl
-         << " -irf constraints_file" << endl
-         << "    file containing all relations" << endl
-         << " -algo algorithm to be used" << endl
-         << "    available algorithms: { 'Seq', 'DynP' }" << endl
-         << " -out output file" << endl
-         << "    file to write results" << endl;
+    cerr << "Usage: ./run -c <config_file>" << endl;
 }
 
 int Utils::checkArg(int i, int max) {

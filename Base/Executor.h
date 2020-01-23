@@ -23,7 +23,7 @@ class Executor {
 public:
     Executor(Config* config);
 
-    void run();
+    void run(json query);
 
     int buildConstraintMatrices(json query, vector<int> *dimensions, map<string, ConstraintMatrix*> &constraint_matrices);
     int buildTransitionMatrices(string metapath, vector<int> dimensions, map<string, ConstraintMatrix*> constraint_matrices, vector<TransitionMatrix*> &transition_matrices);

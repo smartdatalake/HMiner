@@ -5,10 +5,10 @@
 #include "../Utils.h"
 #include "../libs/csv-filter/dsv_filter.hpp"
 
-json FileParser::readQuery(string query_file) {
+json FileParser::readConfig(string config_file) {
     
     // read whole file into string
-    ifstream fd(query_file);
+    ifstream fd(config_file);
     stringstream stream;
     stream << fd.rdbuf();
     fd.close();

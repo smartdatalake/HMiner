@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "Base/Executor.h"
 #include "Base/Config.h"
+#include "Base/FileParser.h"
 
 using namespace std;
 using namespace Eigen;
@@ -14,62 +15,43 @@ const char *RELATIONS_DIR = "-irdir";
 const char *CONSTRAINTS_FILE_ARG = "-c";
 const char *ALGORITHM = "-algo";
 const char *OUTPUT_FILE = "-out";
+const char *CONFIG_FILE = "-c";
 
 int main(int argc, char* argv[]) {
 
+
+    if (argc != 3) {
+        Utils::usage();
+        return EXIT_FAILURE;
+    }
+    int i = Utils::checkArg(1, argc);
+
+    // read params from config file
+    json params = FileParser::readConfig(argv[i]);
+
+    // set parameters according to config file
     Config config;
-
-    int i = 1;
-    while (i < argc) {
-
-        if (!strcmp(argv[i], QUERY_FILE)) {
-            i = Utils::checkArg(i, argc);
-            config.setQueryFile(argv[i]);
-
-        } else if (!strcmp(argv[i], NODES_DIR)) {
-            i = Utils::checkArg(i, argc);
-            config.setNodesDir(argv[i]);
-
-        } else if (!strcmp(argv[i], RELATIONS_FILE)) {
-            i = Utils::checkArg(i, argc);
-            config.setRelationsFile(argv[i]);
-        
-        } else if (!strcmp(argv[i], RELATIONS_DIR)) {
-            i = Utils::checkArg(i, argc);
-            config.setRelationsDir(argv[i]);
-            
-        } else if (!strcmp(argv[i], CONSTRAINTS_FILE_ARG)) {
-            i = Utils::checkArg(i, argc);
-            config.setConstraintsFile(argv[i]);
-
-        } else if (!strcmp(argv[i], ALGORITHM)) {
-            i = Utils::checkArg(i, argc);
-
-            if (!strcmp(argv[i], "Seq")) {
-                config.setAlgorithm(algorithm_type::Seq);
-            } else if (!strcmp(argv[i], "DynP")) {
-                config.setAlgorithm(algorithm_type::DynP);
-            } else {
-                perror("Unrecognised Algorithm given");
-                Utils::usage();
-                exit(EXIT_FAILURE);
-            }
-        } else if (!strcmp(argv[i], OUTPUT_FILE)) {
-            i = Utils::checkArg(i, argc);
-            config.setOutputFile(argv[i]);
-        } else {
-            Utils::usage();
-            exit(1);
-        }
-        i++;
+    config.setQueryFile(params["qf"]);
+    config.setNodesDir(params["indir"]);
+    if (!params["irdir"].empty())
+        config.setRelationsDir(params["irdir"]);
+    else 
+        config.setRelationsFile(params["irf"]);
+    
+    string algorithm = params["algorithm"];
+    if (algorithm == "Seq")
+        config.setAlgorithm(algorithm_type::Seq);
+    else if (algorithm == "DynP")
+        config.setAlgorithm(algorithm_type::DynP);
+    else {
+        cerr << "Algorithm argument should be one of { Seq, DynP }" << endl;
+        return EXIT_FAILURE;
     }
 
-    #ifdef DEBUG_MSG
-        config.printArgs();
-    #endif
+    config.setOutputFile(params["hin_out"]);
 
     Executor* exec = new Executor(&config);
-    exec->run();
+    exec->run(params["query"]);
     delete exec;
 
     return 0;

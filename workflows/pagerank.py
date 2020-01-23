@@ -1,18 +1,20 @@
 import sys
 import numpy as np
 from scipy import sparse
-# from fast_pagerank import pagerank
 from fast_pagerank import pagerank_power
 import csv
+import json
 
-if len(sys.argv) != 5:
-    print("Usage: python3 pagerank.py <input_file> <alpha> <tolerance> <output_file>")
+if len(sys.argv) != 3:
+    print("Usage: python3 pagerank.py -c <config_file>")
     sys.exit(-1)
 
-inputfile = sys.argv[1]
-alpha = float(sys.argv[2])
-tol = float(sys.argv[3])
-outfile = sys.argv[4]
+with open(sys.argv[2]) as config_file:
+    config = json.load(config_file)
+    inputfile = config["hin_out"]
+    alpha = config["pr_alpha"]
+    tol = config["pr_tol"]
+    outfile = config["ranking_out"]
 
 # load adjacency matrix from file
 print("1\tLoading input adjacency matrix")
@@ -42,3 +44,4 @@ with open(outfile, 'w', newline='') as csvfile:
     filewriter = csv.writer(csvfile, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     for i in sorted_indices:
         filewriter.writerow([i, PR[i]])
+        # print(str(i) + "\t" + str(PR[i]))

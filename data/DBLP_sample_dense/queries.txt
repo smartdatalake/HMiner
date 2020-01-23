@@ -1,6 +1,6 @@
 {
     "metapath": "APC", 
     "constraints": {
-        "A": "id < 200"
+        "P": "year >= 2000 and year <= 2018"
     }
 }

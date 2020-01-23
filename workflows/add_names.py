@@ -1,13 +1,16 @@
 import sys
 import csv
+import json
 
-if len(sys.argv) != 4: 
-    print("Usage: python3 add_names.py <input_file_with_names> <input_file_with_pagerank_results> <output_file>")
-    sys.exit(-1)
-    
-input_idx = sys.argv[1]
-input_pr = sys.argv[2]
-outfile = sys.argv[3]
+with open(sys.argv[2]) as config_file:
+    config = json.load(config_file)
+    metapath = config["query"]["metapath"]
+    nodes_dir = config["indir"]
+    outfile = config["final_out"]
+    input_pr = config["ranking_out"]
+    first_entity = metapath[:1]
+
+input_idx = nodes_dir + first_entity + ".csv"
 
 # assign names to ids 
 names = {}
@@ -21,13 +24,14 @@ with open(input_idx) as fp:
         line = fp.readline()
 
 
-# read pagerank resuls and append names
+# read pagerank resuls from stdin and append names
 with open(outfile, 'w', newline='') as csvfile:
     filewriter = csv.writer(csvfile, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
     with open(input_pr) as fd:
         
         for line in fd:
+        # for line in sys.stdin:
 
             line = line.rstrip()
             parts = line.split("\t")

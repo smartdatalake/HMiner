@@ -1,0 +1,18 @@
+{
+    "qf": "../data/DBLP_sample_dense/queries.txt",
+    "indir": "../data/DBLP_sample_dense/nodes/",
+    "irdir": "../data/DBLP_sample_dense/relations/",
+    "algorithm": "DynP",
+    "hin_out": "../data/out/HIN.csv",
+    "ranking_out": "../data/out/PR.csv",
+    "final_out": "../data/out/PR_final.csv",
+    "pr_alpha": 0.5,
+    "pr_tol": 0.00000000001,
+    "query": {
+        "metapath": "APC", 
+        "constraints": {
+            "P": "year >= 2000 and year <= 2018"
+        }
+    }
+    
+}
