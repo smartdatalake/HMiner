@@ -20,7 +20,9 @@ public:
     static int get_max_column_value(string filename, int column_idx);
     static void print(Eigen::SparseMatrix<int, RowMajor> *matrix_);
     static void log(string msg);
+    static void logProgress(string msg);
     static double diffTime(clock_t begin);
+    static void logTime(clock_t begin);
     static void split(string line, vector<string> &tokens, char delim);
     static void printConstraint(tuple<string, string, string> constraint);
 

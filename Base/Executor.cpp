@@ -48,7 +48,10 @@ int Executor::buildConstraintMatrices(json query, vector<int> *dimensions, map<s
                 cerr << "Error: Building constraint matrix for entity " << node_name << endl;
                 return -1;
             }
-            cout << "* nonZero(" << node_name << ") = " << matrix->nonZeros() << endl;
+
+            #ifdef DEBUG_MSG
+                cout << "* nonZero(" << node_name << ") = " << matrix->nonZeros() << endl;
+            #endif
 
             constraint_matrices.emplace(node_name, matrix);
         }
@@ -79,10 +82,14 @@ void Executor::cleanup(unordered_map<string, TransitionMatrix*> transition_matri
 int Executor::buildTransitionMatrices(string metapath, vector<int> dimensions, map<string, 
         ConstraintMatrix*> constraint_matrices, vector<TransitionMatrix*> &transition_matrices) {
 
-    cout << "*RELATIONS WITHOUT CONSTRAINTS*" << endl;
+    #ifdef DEBUG_MSG
+        cout << "*RELATIONS WITHOUT CONSTRAINTS*" << endl;
+    #endif
 
     // create map with transition matrices for unique relations in metapath
     clock_t begin = clock();
+    Utils::logProgress("Parsing relations");
+
     unordered_map<string, TransitionMatrix*> matrices_map;
     for(unsigned int i=0; i<metapath.size()-1; i++) {
         
@@ -107,16 +114,21 @@ int Executor::buildTransitionMatrices(string metapath, vector<int> dimensions, m
             }
 
             matrices_map.emplace(relation, tm);
-            cout << "* relations(" << relation << ") = " << tm->nonZeros() << endl;
-
+            #ifdef DEBUG_MSG
+                cout << "* relations(" << relation << ") = " << tm->nonZeros() << endl;
+            #endif
         }
     }
-    Utils::log("Read relations from file in " + to_string(Utils::diffTime(begin)) + " sec");
+    Utils::logTime(begin);
 
-    cout << "*TRANSITION MATRICES*" << endl;
+    #ifdef DEBUG_MSG
+        cout << "*TRANSITION MATRICES*" << endl;
+    #endif
 
     // construct matrices (and apply constraints) 
     begin = clock();
+    Utils::logProgress("Applying constraints");
+
     for(unsigned int i=0; i<metapath.size()-1; i++) {
         string src = metapath.substr(i, 1);
         string dest = metapath.substr(i+1, 1);
@@ -145,10 +157,13 @@ int Executor::buildTransitionMatrices(string metapath, vector<int> dimensions, m
         }
 
         transition_matrices.push_back(transition_matrix);
-        cout << "* relation(" << transition_matrix->getRelation() << ") = " << transition_matrix->nonZeros() << endl;
+        
+        #ifdef DEBUG_MSG
+            cout << "* relation(" << transition_matrix->getRelation() << ") = " << transition_matrix->nonZeros() << endl;
+        #endif
 
     }
-    Utils::log("Apply constraints in " + to_string(Utils::diffTime(begin)) + " sec");
+    Utils::logTime(begin);
 
     this->cleanup(constraint_matrices);
     this->cleanup(matrices_map);
@@ -166,19 +181,22 @@ int Executor::write(TransitionMatrix* result, string outfile) {
 
 void Executor::run(json query) {
 
-    Utils::log("Process metapath: " + to_string(query["metapath"]));
+    Utils::logProgress("Processing Metapath: " + to_string(query["metapath"]) + "\n");
 
     // calculate dimensions for matrices 
     clock_t begin = clock();
     vector<int> dimensions;
+    
+    Utils::logProgress("Calculating Matrix Dimensions");
+
     if (FileParser::getMatrixDimensions(query["metapath"], this->_config->_nodes_dir, &dimensions)) {
         cerr << "Error: Cannot read matrix dimensions from input files" << endl;
         exit(EXIT_FAILURE);
     }
-
-    Utils::log("Matrix Dimensions calculated in " + to_string(Utils::diffTime(begin)) + " sec");
+    Utils::logTime(begin);
 
     // if constraints are given, build constraint matrices
+    Utils::logProgress("Builiding Constraint Matrices");
     begin = clock();
     map<string, ConstraintMatrix*> constraint_matrices;
     if (!query["constraints"].empty()) {
@@ -187,19 +205,19 @@ void Executor::run(json query) {
             exit(EXIT_FAILURE);
         }
     }    
-    Utils::log("Constraint Matrices successfully built " + to_string(Utils::diffTime(begin)) + " sec");
+    Utils::logTime(begin);
 
     // build transition matrices
-    begin = clock();
     vector<TransitionMatrix*> transition_matrices ;
     if (this->buildTransitionMatrices(query["metapath"], dimensions, constraint_matrices, transition_matrices)) {
-        cerr << "Error: Building transition matrices" << endl;
+        cerr << "Error: Building Transition Matrices" << endl;
         exit(EXIT_FAILURE);
     }
 
     auto* hrank = new HRankSY(this->_config);
 
     begin = clock();
+    Utils::logProgress("Mining Associations");
     algorithm_type algorithm = this->_config->_algo;
     TransitionMatrix* result = nullptr;
 
@@ -209,11 +227,12 @@ void Executor::run(json query) {
         cerr << "Error: Unknown algorithm given" << endl;
         exit(EXIT_FAILURE);
     } 
-    Utils::log("Matrix multiplication took " + to_string(Utils::diffTime(begin)) + " sec");
+    Utils::logTime(begin);
 
     begin = clock();
+    Utils::logProgress("Writing Results");
     this->write(result, this->_config->_output_file);
-    Utils::log("Write result in file in " + to_string(Utils::diffTime(begin)) + " sec");
+    Utils::logTime(begin);
 
     delete result;
     delete hrank;

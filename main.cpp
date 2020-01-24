@@ -31,7 +31,6 @@ int main(int argc, char* argv[]) {
 
     // set parameters according to config file
     Config config;
-    config.setQueryFile(params["qf"]);
     config.setNodesDir(params["indir"]);
     if (!params["irdir"].empty())
         config.setRelationsDir(params["irdir"]);

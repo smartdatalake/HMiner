@@ -1,5 +1,4 @@
 {
-    "qf": "../data/DBLP_sample_dense/queries.txt",
     "indir": "../data/DBLP_sample_dense/nodes/",
     "irdir": "../data/DBLP_sample_dense/relations/",
     "algorithm": "DynP",

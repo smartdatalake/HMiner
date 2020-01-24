@@ -17,11 +17,11 @@ with open(sys.argv[2]) as config_file:
     outfile = config["ranking_out"]
 
 # load adjacency matrix from file
-print("1\tLoading input adjacency matrix")
+print("Ranking\t1\tLoading Adjacency Matrix")
 A = np.loadtxt(inputfile, delimiter='\t', usecols={0, 1}, dtype=np.int32)
 
 # calculate max dimension
-print("2\tTransforming adjacency matrix")
+print("Ranking\t2\tTransforming Adjacency Matrix")
 N = max(np.amax(A[:,0]), np.amax(A[:,1])) + 1
 
 # initialize weights
@@ -31,15 +31,15 @@ W = np.full(len(A), 1 / len(A))
 G = sparse.csr_matrix((W, (A[:,0], A[:,1])), shape=(N, N))
 
 # run pagerank
-print("3\tExecuting PageRank")
+print("Ranking\t3\tRunning Ranking")
 PR = pagerank_power(G, p=alpha, tol=tol)
 
 # sorting output
-print("4\tSorting results")
+print("Ranking\t4\tSorting Results")
 sorted_indices = np.argsort(PR)[::-1][:len(PR)]
 
 # write results to output file
-print("5\tWriting results to file")
+print("Ranking\t5\tWriting Results")
 with open(outfile, 'w', newline='') as csvfile:
     filewriter = csv.writer(csvfile, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     for i in sorted_indices:

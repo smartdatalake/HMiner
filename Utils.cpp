@@ -101,6 +101,15 @@ void Utils::log(string msg) {
     cout << msg << endl;
 }
 
+void Utils::logProgress(string msg) {
+    static int step = 0;
+    cout << "Associations Mining\t" << ++step << "\t" << msg;
+}
+
+void Utils::logTime(clock_t begin) {
+    cout << "\tTime = " << Utils::diffTime(begin) << endl;
+}
+
 double Utils::diffTime(clock_t begin) {
     return double(clock() - begin) / CLOCKS_PER_SEC;
 }
