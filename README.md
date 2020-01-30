@@ -50,31 +50,35 @@ git submodule update --remote
 make
 ```
 
+#### Configuration 
+The program recieves parameters from a json config file. An example config file is the following: 
+```
+{
+    "indir": "../data/DBLP_sample_dense/nodes/",
+    "irdir": "../data/DBLP_sample_dense/relations/",
+    "algorithm": "DynP",
+    "hin_out": "../data/out/HIN.csv",
+    "ranking_out": "../data/out/PR.csv",
+    "final_out": "../data/out/PR_final.csv",
+    "pr_alpha": 0.5,
+    "pr_tol": 0.00000000001,
+    "query": {
+        "metapath": "APC", 
+        "constraints": {
+            "P": "year >= 2000 and year <= 2018"
+        }
+    }
+    
+}
+```
+
+
 #### Execution
 
-All the algorithms can be executed with the following command: 
-
+Execute ranking with the following command: 
 ```
-./run -qf <query_file> -indir <input_node_directory> -irdir <input_relations_directory> -algo <algorithm>  -out <output_file>
+bash ./workloads/ranking.sh
 ```
-
-Parameters are explained in the table below:
-
-| Parameter   |      Description      |
-|----------|:-------------:|
-| -qf |  the query file that contains the query to be executed |
-| -indir |    the directory that contains the input files for node attributes    |
-| -irdir | the directory that contains the input files for node relations (NOTE: give either -irdir or -irf) |
-| -irf | a file that containts all the relations (NOTE: give either -irdir or -irf) |
-| -algo | the algorithm to be used; choose one of `Seq, DynP` |
-| -out | the file to store the final result |
-
-An example execution command can be the following: 
-```
-./run -qf data/DBLP_sample_dense/queries.txt -indir data/DBLP_sample_dense/nodes/ -irdir data/DBLP_sample_dense/relations/ -algo DynP -out data/out/outfile.csv
-```
-
-It executes the `DynP` algorithm for the metapath query in the file specified by the `-qf` flag.
 
 #### References
 [1] Y. P. S. W. B. Shi Chuan, Li Yitong. Constrained-meta-path-based rankingin heterogeneous information network. Knowledge and Information Systems, 2016
