@@ -27,14 +27,14 @@ int FileParser::getMatrixDimensions(string metapath, string nodes_dir, vector<in
         // find dimension of the constraint table
         string node_data_file = nodes_dir + metapath.substr(i, 1) + ".csv";
         
-        // int id_idx = Utils::get_column_idx(node_data_file, "id_n");
-        // int dim = Utils::get_max_column_value(node_data_file, 0) + 1;
+        int id_idx = Utils::get_column_idx(node_data_file, "id_n");
+        int dim = Utils::get_max_column_value(node_data_file, 0) + 1;
 
-        if (!filter.load(node_data_file)) {
-            return -1;
-        }
+        // if (!filter.load(node_data_file)) {
+        //     return -1;
+        // }
 
-        int dim = filter.row_count();
+        // int dim = filter.row_count();
         dimensions->push_back(dim);
     }
     return 0;
