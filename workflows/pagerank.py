@@ -19,13 +19,15 @@ with open(sys.argv[2]) as config_file:
 # load adjacency matrix from file
 print("Ranking\t1\tLoading Adjacency Matrix")
 A = np.loadtxt(inputfile, delimiter='\t', usecols={0, 1}, dtype=np.int32)
+W = np.loadtxt(inputfile, delimiter='\t', usecols={2}, dtype=np.float64)
+
+# normalize edge weights
+total_sum = np.sum(W)
+W /= total_sum
 
 # calculate max dimension
 print("Ranking\t2\tTransforming Adjacency Matrix")
 N = max(np.amax(A[:,0]), np.amax(A[:,1])) + 1
-
-# initialize weights
-W = np.full(len(A), 1 / len(A))
 
 # transform to sparse matrix representation
 G = sparse.csr_matrix((W, (A[:,0], A[:,1])), shape=(N, N))
