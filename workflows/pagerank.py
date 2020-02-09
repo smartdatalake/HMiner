@@ -21,9 +21,10 @@ print("Ranking\t1\tLoading Adjacency Matrix")
 A = np.loadtxt(inputfile, delimiter='\t', usecols={0, 1}, dtype=np.int32)
 W = np.loadtxt(inputfile, delimiter='\t', usecols={2}, dtype=np.float64)
 
-if (A.size == 0):
-    print("Empty Adjacency Matrix: No results found")
-    sys.exit(4)
+if (A.size <= 0):
+    # create empty file
+    open(outfile, 'a').close()
+    sys.exit(0)
 
 # normalize edge weights
 total_sum = np.sum(W)
