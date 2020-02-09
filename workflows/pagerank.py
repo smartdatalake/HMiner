@@ -48,7 +48,6 @@ sorted_indices = np.argsort(PR)[::-1][:len(PR)]
 indices = np.unique(np.concatenate((A[:,0], A[:,1])))
 sorted_indices = sorted_indices[np.isin(sorted_indices, indices)]
 
-print(sorted_indices)
 # write results to output file
 print("Ranking\t5\tWriting Results")
 with open(outfile, 'w', newline='') as csvfile:
