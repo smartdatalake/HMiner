@@ -21,12 +21,16 @@ print("Ranking\t1\tLoading Adjacency Matrix")
 A = np.loadtxt(inputfile, delimiter='\t', usecols={0, 1}, dtype=np.int32)
 W = np.loadtxt(inputfile, delimiter='\t', usecols={2}, dtype=np.float64)
 
+if (A.size == 0):
+    print("Empty Adjacency Matrix: No results found")
+    sys.exit(4)
+
 # normalize edge weights
 total_sum = np.sum(W)
 W /= total_sum
 
 # calculate max dimension
-print("Ranking\t2\tTransforming Adjacency Matrix")
+print("Ranking\t2\tTransforming Adjacency Matrix") 
 N = max(np.amax(A[:,0]), np.amax(A[:,1])) + 1
 
 # transform to sparse matrix representation
@@ -40,10 +44,14 @@ PR = pagerank_power(G, p=alpha, tol=tol)
 print("Ranking\t4\tSorting Results")
 sorted_indices = np.argsort(PR)[::-1][:len(PR)]
 
+# filter out indices that are not in A  
+indices = np.unique(np.concatenate((A[:,0], A[:,1])))
+sorted_indices = sorted_indices[np.isin(sorted_indices, indices)]
+
+print(sorted_indices)
 # write results to output file
 print("Ranking\t5\tWriting Results")
 with open(outfile, 'w', newline='') as csvfile:
     filewriter = csv.writer(csvfile, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     for i in sorted_indices:
         filewriter.writerow([i, PR[i]])
-        # print(str(i) + "\t" + str(PR[i]))
