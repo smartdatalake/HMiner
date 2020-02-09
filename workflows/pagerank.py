@@ -21,7 +21,7 @@ print("Ranking\t1\tLoading Adjacency Matrix")
 A = np.loadtxt(inputfile, delimiter='\t', usecols={0, 1}, dtype=np.int32)
 W = np.loadtxt(inputfile, delimiter='\t', usecols={2}, dtype=np.float64)
 
-if (A.size <= 0):
+if (A.size <= 2):
     # create empty file
     open(outfile, 'a').close()
     sys.exit(0)
