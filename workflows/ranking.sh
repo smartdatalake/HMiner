@@ -8,12 +8,7 @@ if ! ./run -c "$config"; then
         exit 1
 fi
 
-python3 pagerank.py -c "$config"
-retVal=$?
-if [ $retVal -eq 4 ]; then
-        echo "No results found"
-        exit 4
-elif [ $retVal -ne 0 ]; then
+if ! python3 pagerank.py -c "$config"; then
         echo "Error: Ranking"
         exit 2
 fi
