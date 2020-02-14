@@ -38,7 +38,7 @@ N = max(np.amax(A[:,0]), np.amax(A[:,1])) + 1
 G = sparse.csr_matrix((W, (A[:,0], A[:,1])), shape=(N, N))
 
 # run pagerank
-print("Ranking\t3\Executing Ranking Algorithm", flush=True)
+print("Ranking\t3\tExecuting Ranking Algorithm", flush=True)
 PR = pagerank_power(G, p=alpha, tol=tol)
 
 # sorting output
