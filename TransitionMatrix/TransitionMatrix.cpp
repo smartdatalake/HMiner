@@ -127,7 +127,7 @@ int TransitionMatrix::cols() const {
 int TransitionMatrix::build(string relations_dir) {
 
     std::vector< Eigen::Triplet<int> > tripletList;
-    string relations_file = relations_dir + this->_relation + ".crs";
+    string relations_file = relations_dir + this->_relation + ".csv";
     ifstream infile(relations_file);
 
     if (!infile.good()) {
