@@ -14,7 +14,7 @@ with open(sys.argv[2]) as config_file:
     inputfile = config["hin_out"]
     alpha = config["pr_alpha"]
     tol = config["pr_tol"]
-    outfile = config["ranking_out"]
+    outfile = config["out"]
 
 # load adjacency matrix from file
 print("Ranking\t1\tLoading Adjacency Matrix", flush=True)
