@@ -7,7 +7,7 @@ with open(sys.argv[2]) as config_file:
     metapath = config["query"]["metapath"]
     nodes_dir = config["indir"]
     outfile = config["final_out"]
-    input_pr = config["ranking_out"]
+    input_pr = config["analysis_out"]
     first_entity = metapath[:1]
 
 input_idx = nodes_dir + first_entity + ".csv"
