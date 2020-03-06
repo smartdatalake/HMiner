@@ -221,12 +221,17 @@ void Executor::run(json query) {
     algorithm_type algorithm = this->_config->_algo;
     TransitionMatrix* result = nullptr;
 
-    if (algorithm == algorithm_type::Seq || algorithm == algorithm_type::DynP) {
-        result = hrank->run(query["metapath"], transition_matrices, dimensions);
+    if (transition_matrices.size() > 1) {
+        if (algorithm == algorithm_type::Seq || algorithm == algorithm_type::DynP) {
+            result = hrank->run(query["metapath"], transition_matrices, dimensions);
+        } else {
+            cerr << "Error: Unknown algorithm given" << endl;
+            exit(EXIT_FAILURE);
+        } 
     } else {
-        cerr << "Error: Unknown algorithm given" << endl;
-        exit(EXIT_FAILURE);
-    } 
+        result = transition_matrices[0];
+    }
+
     Utils::logTime(begin);
 
     begin = clock();
