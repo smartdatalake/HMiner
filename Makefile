@@ -31,4 +31,5 @@ clean:
 	rm TransitionMatrix/*.o
 	rm MatrixMultiplier/*.o
 	rm run
-	rm workflows/run
+	rm workflows/ranking/run
+	rm workflows/mining/run
