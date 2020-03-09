@@ -42,6 +42,10 @@ void Config::setOutputFile(string output_file) {
     _output_file = output_file;
 }
 
+void Config::setOutputType(const string &output_type) {
+    this->_output_type = output_type;
+}
+
 string Config::getAlgorithm() const {
     switch (Config::_algo) {
         case algorithm_type::Seq:   return "Seq";
@@ -56,5 +60,9 @@ void Config::setRelationsDir(const string &relations_dir) {
 
 const string & Config::getRelationsDir() const {
     return this->_relations_dir;
+}
+
+const string & Config::getOutputType() const {
+    return this->_output_type;
 }
 

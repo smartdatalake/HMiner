@@ -55,6 +55,7 @@ public:
     long double nonZeros() const;
 
     void write(ofstream &fd, SparseMatrix<int, RowMajor> *tmp_result);
+    void writeCondensed(ofstream &fd, Eigen::SparseMatrix<int, RowMajor> *tmp_result);
     void writeForPagerank(ofstream &fd, Eigen::SparseMatrix<int, RowMajor> *tmp_result);
 };
 

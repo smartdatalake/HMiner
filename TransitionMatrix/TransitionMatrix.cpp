@@ -116,6 +116,26 @@ void TransitionMatrix::write(ofstream &fd, Eigen::SparseMatrix<int, RowMajor> *t
     }
 }
 
+void TransitionMatrix::writeCondensed(ofstream &fd, Eigen::SparseMatrix<int, RowMajor> *tmp_result) {
+
+    for (int i=0; i < (*tmp_result).rows(); ++i) {
+        int srcNode = -1;
+        bool added = false;
+
+        for (Eigen::SparseMatrix<int, RowMajor>::InnerIterator it(*tmp_result, i); it; ++it) {
+            if (srcNode != it.row()) {
+                srcNode = it.row();
+                fd << srcNode << "\t" << it.col() << "|" << it.value();
+            } else {
+                fd << ";" << it.col() << "|" << it.value();
+            }
+            added = true;
+        }
+        if (added)
+            fd << "\n";
+    }
+}
+
 int TransitionMatrix::rows() const {
     return _rows;
 }
