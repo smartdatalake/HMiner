@@ -48,6 +48,7 @@ int main(int argc, char* argv[]) {
     }
 
     config.setOutputFile(params["hin_out"]);
+    config.setOutputType(params["analysis_out_type"]);
 
     Executor* exec = new Executor(&config);
     exec->run(params["query"]);

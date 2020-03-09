@@ -1,0 +1,18 @@
+{
+    "indir": "../../data/DBLP_sample_dense/nodes/",
+    "irdir": "../../data/DBLP_sample_dense/relations/",
+    "algorithm": "DynP",
+    "hin_out": "./HIN.csv",
+    "analysis_out": "./ANALYSIS.csv",
+    "final_out": "./PR_final.csv",
+    "analysis_out_type": "verbose",
+    "pr_alpha": 0.5,
+    "pr_tol": 0.00000000001,
+    "query": {
+        "metapath": "APPA",
+        "constraints": {
+            "P": "year >= 2000 and year <= 2018"
+        }
+    }
+    
+}

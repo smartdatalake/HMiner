@@ -21,6 +21,7 @@ public:
     string _query_file;
     algorithm_type _algo;
     string _output_file;
+    string _output_type; 
 
     void setQueryFile(const string &query_file);
 
@@ -34,6 +35,8 @@ public:
 
     void setRelationsDir(const string &relations_dir); 
 
+    void setOutputType(const string &output_type);
+
     void printArgs();
 
     void setOutputFile(string output_dir);
@@ -45,7 +48,8 @@ public:
     const string &getRelationsFile() const;
 
     const string &getRelationsDir() const;
-
+    
+    const string &getOutputType() const;
 };
 
 
