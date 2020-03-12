@@ -16,8 +16,8 @@ with open(sys.argv[2]) as config_file:
 src_entity_file = nodes_dir + src_entity + ".csv"
 dest_entity_file = nodes_dir + dest_entity + ".csv"
 
-print(src_entity_file)
-print(dest_entity_file)
+#print(src_entity_file)
+#print(dest_entity_file)
 
 def read_data_file(input_file):
     with open(input_file) as fp:

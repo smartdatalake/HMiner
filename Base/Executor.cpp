@@ -174,7 +174,7 @@ int Executor::buildTransitionMatrices(string metapath, vector<int> dimensions, m
 int Executor::write(TransitionMatrix* result, string outfile) {
 
     ofstream fd = ofstream(outfile);
-cout << this->_config->getOutputType() << endl;
+
     if (this->_config->getOutputType() == "condensed") {
         result->writeCondensed(fd, result->getMatrix());
     } else {
