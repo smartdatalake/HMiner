@@ -1,17 +1,15 @@
 {
-    "indir": "../../data/DBLP_sample_dense/nodes/",
-    "irdir": "../../data/DBLP_sample_dense/relations/",
+    "indir": "../../data/gdelt/nodes/",
+    "irdir": "../../data/gdelt/relations/",
     "algorithm": "DynP",
     "hin_out": "./HIN.csv",
     "analysis_out": "./ANALYSIS.csv",
     "analysis_out_type": "condensed",
     "query": {
-        "metapath": "APC",
+        "metapath": "PAP",
         "src_field": "name",
         "dest_field": "name",
         "constraints": {
-            "P": "year >= 2000 and year <= 2018"
         }
     }
-    
 }
