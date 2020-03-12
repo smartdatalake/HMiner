@@ -68,12 +68,10 @@ with open(outfile, 'w', newline='') as csvfile:
             dest = []
             for dest_rec in parts[1].split(";"):
                 # print (dest_rec)
-                
-                dest_rec_parts = dest_rec.split('|')
-
+            
                 value = 'Unknown'
-                if dest_rec_parts[0] in dest_dict :
-                    dest.append(dest_dict[dest_rec_parts[0]] + "|" + dest_rec_parts[1])
+                if dest_rec in dest_dict :
+                    dest.append(dest_dict[dest_rec])
             row_data.append(";".join(dest))
             # print(row_data)
            

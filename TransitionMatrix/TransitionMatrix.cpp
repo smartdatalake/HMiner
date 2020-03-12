@@ -127,7 +127,9 @@ void TransitionMatrix::writeCondensed(ofstream &fd, Eigen::SparseMatrix<int, Row
                 srcNode = it.row();
                 fd << srcNode << "\t" << it.col() << "|" << it.value();
             } else {
-                fd << ";" << it.col() << "|" << it.value();
+                for (int j=0; j<it.value(); j++){
+                    fd << ";" << it.col();
+                }
             }
             added = true;
         }
