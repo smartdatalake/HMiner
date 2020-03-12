@@ -6,9 +6,9 @@
     "analysis_out": "./ANALYSIS.csv",
     "analysis_out_type": "condensed",
     "query": {
-        "metapath": "PAP",
+        "metapath": "PA",
         "src_field": "name",
-        "dest_field": "name",
+        "dest_field": "gdelt_id",
         "constraints": {
         }
     }

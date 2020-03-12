@@ -16,10 +16,10 @@ with open(sys.argv[2]) as config_file:
 src_entity_file = nodes_dir + src_entity + ".csv"
 dest_entity_file = nodes_dir + dest_entity + ".csv"
 
-#print(src_entity_file)
-#print(dest_entity_file)
+# print(src_entity_file)
+# print(dest_entity_file)
 
-def read_data_file(input_file):
+def read_data_file(input_file, selected_field):
     with open(input_file) as fp:
         
         # read header file
@@ -28,23 +28,23 @@ def read_data_file(input_file):
         fields = line.rstrip().split('\t')
         for i in range(len(fields)):
 
-            if src_field in fields[i]: 
+            if selected_field in fields[i]: 
                 break
 
-        src_field_idx = i
+        selected_field_idx = i
 
         # assign names to ids 
         _dict = {}
         while line:
             line = line.rstrip()
             parts = line.strip().split("\t")
-            _dict[parts[0]] = parts[src_field_idx]
+            _dict[parts[0]] = parts[selected_field_idx]
             line = fp.readline()
         
         return _dict
 
-src_dict = read_data_file(src_entity_file)
-dest_dict = read_data_file(dest_entity_file)
+src_dict = read_data_file(src_entity_file, src_field)
+dest_dict = read_data_file(dest_entity_file, dest_field)
 
 # read analysis resuls and append names
 with open(outfile, 'w', newline='') as csvfile:
