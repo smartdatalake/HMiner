@@ -5,19 +5,28 @@ from fast_pagerank import pagerank_power
 import csv
 import json
 import subprocess
+import add_names as utils
 
 if len(sys.argv) != 3:
     print("Usage: python3 pagerank.py -c <config_file>")
     sys.exit(-1)
 
 with open(sys.argv[2]) as config_file:
+
+
+
     config = json.load(config_file)
+    if "ranking" not in config:
+        sys.exit(0)
+
     inputfile = config["hin_out"]
-    alpha = config["pr_alpha"]
-    tol = config["pr_tol"]
-    outfile = config["analysis_out"]
+    alpha = config["ranking"]["pr_alpha"]
+    tol = config["ranking"]["pr_tol"]
+    outfile = config["ranking"]["ranking_out"]
     metapath = config["query"]["metapath"]
-    threshold = config["threshold"]
+    threshold = config["ranking"]["threshold"]
+    nodes_dir = config["indir"]
+    src_field = config["query"]["src_field"]
 
 # Do not execute PR when no symmetric metapath is given
 if (metapath[0] != metapath[-1]):
@@ -64,7 +73,10 @@ sorted_indices = sorted_indices[np.isin(sorted_indices, indices)]
 
 # write results to output file
 print("Ranking\t5\tWriting Results", flush=True)
+idx_file = nodes_dir + metapath[0] + ".csv"
+idx = utils.read_data_file(idx_file, src_field)
+
 with open(outfile, 'w', newline='') as csvfile:
     filewriter = csv.writer(csvfile, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     for i in sorted_indices:
-        filewriter.writerow([i, PR[i]])
+        filewriter.writerow([idx[str(i)], PR[i]])

@@ -5,15 +5,18 @@
     "hin_out": "./HIN.csv",
     "analysis_out": "./ANALYSIS.csv",
     "analysis_out_type": "verbose",
-    "pr_alpha": 0.5,
-    "pr_tol": 0.00000000001,
-    "threshold": 4,
     "query": {
-        "metapath": "AOA",
+        "metapath": "APA",
         "src_field": "name",
         "dest_field": "name",
         "constraints": {
             "A": "id < 100"
         }
+    }, 
+    "ranking": {
+        "ranking_out": "./RANKING.csv",
+        "pr_alpha": 0.5,
+        "pr_tol": 0.00000000001,
+        "threshold": 2
     }
 }
