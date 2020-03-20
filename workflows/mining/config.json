@@ -4,12 +4,16 @@
     "algorithm": "DynP",
     "hin_out": "./HIN.csv",
     "analysis_out": "./ANALYSIS.csv",
-    "analysis_out_type": "condensed",
+    "analysis_out_type": "verbose",
+    "pr_alpha": 0.5,
+    "pr_tol": 0.00000000001,
+    "threshold": 4,
     "query": {
-        "metapath": "PA",
+        "metapath": "AOA",
         "src_field": "name",
-        "dest_field": "gdelt_id",
+        "dest_field": "name",
         "constraints": {
+            "A": "id < 100"
         }
     }
 }
