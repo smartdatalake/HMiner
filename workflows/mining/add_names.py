@@ -1,5 +1,4 @@
 import sys
-import csv
 import json
 
 with open(sys.argv[2]) as config_file:
@@ -43,36 +42,60 @@ def read_data_file(input_file, selected_field):
         
         return _dict
 
+# def expand_result(value, times):
+
 src_dict = read_data_file(src_entity_file, src_field)
 dest_dict = read_data_file(dest_entity_file, dest_field)
 
+srcId = ''
+src = ''
+values = ''
 # read analysis resuls and append names
-with open(outfile, 'w', newline='') as csvfile:
-    filewriter = csv.writer(csvfile, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+with open(outfile, 'w') as fout:
 
-    with open(infile) as fd:
+    with open(infile) as fin:
         
-        for line in fd:
-            # print(line)
-
+        for line in fin:
             line = line.rstrip()
             parts = line.split("\t")
 
-            row_data = []
-            
-            # append src field
-            value = 'Unknown'
-            if parts[0] in src_dict: 
-                row_data.append(src_dict[parts[0]])
+            if (srcId != parts[0]):
+               
+                srcId = parts[0]
 
-            dest = []
-            for dest_rec in parts[1].split(";"):
-                # print (dest_rec)
+                if (src != ''):
+                    fout.write(src + "\t" + values + "\n")
+                    values = ''
+
+                # append src field
+                src = 'Unknown'
+                if parts[0] in src_dict: 
+                    src = src_dict[parts[0]]
             
-                value = 'Unknown'
-                if dest_rec in dest_dict :
-                    dest.append(dest_dict[dest_rec])
-            row_data.append(";".join(dest))
-            # print(row_data)
-           
-            filewriter.writerow(row_data)
+            # print (line)
+            value = 'Unknown'
+            if parts[1] in dest_dict:
+                value = dest_dict[parts[1]]
+
+            if values != '':
+                values += ";"
+                
+            values += ";".join([value]*int(parts[2]))
+                
+    fout.close()
+            #     for i in range(0, int(parts[2])):
+            #         dest.append(value)
+
+
+            # dest = []
+            # for dest_rec in parts[1].split(";"):
+            #     # print (dest_rec)
+
+            #     desc_rec_parts = dest_rec.split("|")
+
+                
+            
+            # row_data.append(";".join(dest))
+            # # print(row_data)
+            
+            # filewriter.writerow(row_data)
