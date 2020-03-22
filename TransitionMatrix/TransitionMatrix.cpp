@@ -81,7 +81,7 @@ TransitionMatrix* TransitionMatrix::dot(TransitionMatrix *a, TransitionMatrix *b
     if (threshold == -1) {
         *result = (*(a->getMatrix()) * *(b->getMatrix())).pruned();       // multiply and prune zeros
     } else {
-        *result = (*(a->getMatrix()) * *(b->getMatrix())).pruned(threshold);       // multiply and prune values less than threshold
+        *result = (*(a->getMatrix()) * *(b->getMatrix())).pruned(threshold, 1);       // multiply and prune values less than threshold
     }
     
 
