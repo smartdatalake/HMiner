@@ -1,5 +1,6 @@
 import sys
 import json
+import utils 
 
 with open(sys.argv[2]) as config_file:
     config = json.load(config_file)
@@ -9,8 +10,13 @@ with open(sys.argv[2]) as config_file:
     metapath = config["query"]["metapath"]
     src_field = config["query"]["src_field"]
     dest_field = config["query"]["dest_field"]
+    build_index = config["query"]["buildIndex"]
     src_entity = metapath[:1]
     dest_entity = metapath[-1]
+
+
+if build_index == False:
+    sys.exit(0)
 
 src_entity_file = nodes_dir + src_entity + ".csv"
 dest_entity_file = nodes_dir + dest_entity + ".csv"
@@ -18,34 +24,10 @@ dest_entity_file = nodes_dir + dest_entity + ".csv"
 # print(src_entity_file)
 # print(dest_entity_file)
 
-def read_data_file(input_file, selected_field):
-    with open(input_file) as fp:
-        
-        # read header file
-        line = fp.readline()
-
-        fields = line.rstrip().split('\t')
-        for i in range(len(fields)):
-
-            if selected_field in fields[i]: 
-                break
-
-        selected_field_idx = i
-
-        # assign names to ids 
-        _dict = {}
-        while line:
-            line = line.rstrip()
-            parts = line.strip().split("\t")
-            _dict[parts[0]] = parts[selected_field_idx]
-            line = fp.readline()
-        
-        return _dict
-
 # def expand_result(value, times):
 
-src_dict = read_data_file(src_entity_file, src_field)
-dest_dict = read_data_file(dest_entity_file, dest_field)
+src_dict = utils.read_data_file(src_entity_file, src_field)
+dest_dict = utils.read_data_file(dest_entity_file, dest_field)
 
 srcId = ''
 src = ''

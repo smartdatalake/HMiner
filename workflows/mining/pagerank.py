@@ -5,15 +5,13 @@ from fast_pagerank import pagerank_power
 import csv
 import json
 import subprocess
-import add_names as utils
+import utils
 
 if len(sys.argv) != 3:
     print("Usage: python3 pagerank.py -c <config_file>")
     sys.exit(-1)
 
 with open(sys.argv[2]) as config_file:
-
-
 
     config = json.load(config_file)
     if "ranking" not in config:
@@ -27,9 +25,10 @@ with open(sys.argv[2]) as config_file:
     threshold = config["ranking"]["threshold"]
     nodes_dir = config["indir"]
     src_field = config["query"]["src_field"]
+    build_index = config["query"]["buildIndex"]
 
 # Do not execute PR when no symmetric metapath is given
-if (metapath[0] != metapath[-1]):
+if (metapath[0] != metapath[-1] or build_index == True):
     sys.exit(0)
 
 # filter inputfile for a specific threshold
