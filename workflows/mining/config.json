@@ -9,11 +9,10 @@
         "metapath": "APA",
         "src_field": "name",
         "dest_field": "name",
-        "buildIndex": false,
+        "buildIndex": "true",
         "constraints": {
-            "A": "id < 100"
         }
-    }, 
+    },
     "ranking": {
         "ranking_out": "./RANKING.csv",
         "pr_alpha": 0.5,

@@ -10,8 +10,8 @@
 
 class MatrixMultiplier {
 public:
-    static TransitionMatrix* sequential(vector<TransitionMatrix*> matrices, bool delete_input);
-    static TransitionMatrix* dynamic(vector<TransitionMatrix*> matrices, vector<int> dimensions, bool delete_input);
+    static TransitionMatrix* sequential(vector<TransitionMatrix*> matrices, int threshold, bool delete_input);
+    static TransitionMatrix* dynamic(vector<TransitionMatrix*> matrices, int threshold, vector<int> dimensions, bool delete_input);
 };
 
 

@@ -185,7 +185,9 @@ int Executor::write(TransitionMatrix* result, string outfile) {
     return 0;
 }
 
-void Executor::run(json query) {
+void Executor::run(json params) {
+    json query = params["query"];
+    json ranking = params["ranking"];
 
     Utils::logProgress("Processing Metapath: " + to_string(query["metapath"]) + "\n");
 
@@ -229,7 +231,13 @@ void Executor::run(json query) {
 
     if (transition_matrices.size() > 1) {
         if (algorithm == algorithm_type::Seq || algorithm == algorithm_type::DynP) {
-            result = hrank->run(query["metapath"], transition_matrices, dimensions);
+            
+            int threshold = -1;
+            if (query["buildIndex"] == "false") {
+                threshold = ranking["threshold"];
+            }
+
+            result = hrank->run(query["metapath"], threshold, transition_matrices, dimensions);
         } else {
             cerr << "Error: Unknown algorithm given" << endl;
             exit(EXIT_FAILURE);

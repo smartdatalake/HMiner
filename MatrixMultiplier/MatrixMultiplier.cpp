@@ -9,7 +9,7 @@
 
 using namespace std;
 
-TransitionMatrix* MatrixMultiplier::sequential(vector<TransitionMatrix*> matrices, bool delete_input) {
+TransitionMatrix* MatrixMultiplier::sequential(vector<TransitionMatrix*> matrices, int threshold, bool delete_input) {
     TransitionMatrix *result = matrices[0];
     TransitionMatrix *tmp_ptr = nullptr;
 
@@ -17,7 +17,7 @@ TransitionMatrix* MatrixMultiplier::sequential(vector<TransitionMatrix*> matrice
 
         tmp_ptr = result;
 
-        result = TransitionMatrix::dot(result, matrices[i]);
+        result = TransitionMatrix::dot(result, matrices[i], threshold);
 
         if (delete_input) {
             delete tmp_ptr;
@@ -29,7 +29,7 @@ TransitionMatrix* MatrixMultiplier::sequential(vector<TransitionMatrix*> matrice
     return result;
 }
 
-TransitionMatrix* MatrixMultiplier::dynamic(vector<TransitionMatrix*> matrices, vector<int> dimensions, bool delete_input) {
+TransitionMatrix* MatrixMultiplier::dynamic(vector<TransitionMatrix*> matrices, int threshold, vector<int> dimensions, bool delete_input) {
 
     auto dynamic_optimizer = new DynamicOptimizer(dimensions.size());
 
@@ -50,7 +50,7 @@ TransitionMatrix* MatrixMultiplier::dynamic(vector<TransitionMatrix*> matrices, 
 
         if (k >= 0 && l >= 0) {
 
-            TransitionMatrix *res = TransitionMatrix::dot(matrices[k], matrices[l]);
+            TransitionMatrix *res = TransitionMatrix::dot(matrices[k], matrices[l], threshold);
 
             // delete multiplied matrices
             if (delete_input) {
@@ -64,7 +64,7 @@ TransitionMatrix* MatrixMultiplier::dynamic(vector<TransitionMatrix*> matrices, 
         } else if (k == -1 && l >= 0) {
 
             tmp_ptr = temp[n-1];
-            temp[n-1] = TransitionMatrix::dot(temp[n-1], matrices[l]);
+            temp[n-1] = TransitionMatrix::dot(temp[n-1], matrices[l], threshold);
 
             // delete multiplied matrices
             if (delete_input) {
@@ -75,7 +75,7 @@ TransitionMatrix* MatrixMultiplier::dynamic(vector<TransitionMatrix*> matrices, 
         } else if (k >= 0 && l == -1) {
 
             tmp_ptr = temp[n-1];
-            temp[n-1] = TransitionMatrix::dot(matrices[k], temp[n-1]);
+            temp[n-1] = TransitionMatrix::dot(matrices[k], temp[n-1], threshold);
 
             // delete multipliced matrices
             if (delete_input) {
@@ -86,7 +86,7 @@ TransitionMatrix* MatrixMultiplier::dynamic(vector<TransitionMatrix*> matrices, 
         } else {
 
             tmp_ptr = temp[n-2];
-            temp[n-2] = TransitionMatrix::dot(temp[n-2], temp[n-1]);
+            temp[n-2] = TransitionMatrix::dot(temp[n-2], temp[n-1], threshold);
 
             // delete multiplied matrices
             if (delete_input) {

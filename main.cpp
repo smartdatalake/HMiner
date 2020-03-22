@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
     config.setOutputType(params["analysis_out_type"]);
 
     Executor* exec = new Executor(&config);
-    exec->run(params["query"]);
+    exec->run(params);
     delete exec;
 
     return 0;

@@ -74,10 +74,16 @@ const string &TransitionMatrix::getRelation() const {
     return _relation;
 }
 
-TransitionMatrix* TransitionMatrix::dot(TransitionMatrix *a, TransitionMatrix *b) {
+TransitionMatrix* TransitionMatrix::dot(TransitionMatrix *a, TransitionMatrix *b, int threshold) {
     string res_relation = a->getRelation() + "_" + b->getRelation();
     auto *result = new SparseMatrix<int, RowMajor>();
-    *result = (*(a->getMatrix()) * *(b->getMatrix())).pruned();       // multiply and prune zeros
+
+    if (threshold == -1) {
+        *result = (*(a->getMatrix()) * *(b->getMatrix())).pruned();       // multiply and prune zeros
+    } else {
+        *result = (*(a->getMatrix()) * *(b->getMatrix())).pruned(threshold);       // multiply and prune values less than threshold
+    }
+    
 
     return new TransitionMatrix(res_relation, result, result->rows(), result->cols());
 }

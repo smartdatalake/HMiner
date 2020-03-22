@@ -48,7 +48,7 @@ public:
     double read();
     void print();
 
-    static TransitionMatrix* dot(TransitionMatrix *a, TransitionMatrix *b);
+    static TransitionMatrix* dot(TransitionMatrix *a, TransitionMatrix *b, int threshold);
 
     int rows() const;
     int cols() const;
