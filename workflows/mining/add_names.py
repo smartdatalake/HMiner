@@ -15,7 +15,7 @@ with open(sys.argv[2]) as config_file:
     dest_entity = metapath[-1]
 
 
-if build_index == False:
+if build_index == "false":
     sys.exit(0)
 
 src_entity_file = nodes_dir + src_entity + ".csv"
