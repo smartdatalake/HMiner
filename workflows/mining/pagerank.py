@@ -32,10 +32,10 @@ if (metapath[0] != metapath[-1] or build_index == "true"):
     sys.exit(0)
 
 # filter inputfile for a specific threshold
-tmp_file = inputfile + ".tmp"
-command = "awk ' $3 >= " + str(threshold) +" ' " + inputfile + " > " + tmp_file + " && mv " + tmp_file + " " + inputfile
-process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
-process.wait()
+# tmp_file = inputfile + ".tmp"
+# command = "awk ' $3 >= " + str(threshold) +" ' " + inputfile + " > " + tmp_file + " && mv " + tmp_file + " " + inputfile
+# process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+# process.wait()
 
 # load adjacency matrix from file
 print("Ranking\t1\tLoading Adjacency Matrix", flush=True)
