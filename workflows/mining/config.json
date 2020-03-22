@@ -9,6 +9,7 @@
         "metapath": "APA",
         "src_field": "name",
         "dest_field": "name",
+        "buildIndex": false,
         "constraints": {
             "A": "id < 100"
         }
