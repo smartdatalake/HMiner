@@ -7,7 +7,6 @@
 
 #include <string>
 #include <vector>
-#include "./libs/eigen/Eigen/Sparse"
 #include "TransitionMatrix/TransitionMatrix.h"
 
 using namespace std;

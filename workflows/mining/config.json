@@ -6,7 +6,7 @@
     "analysis_out": "./ANALYSIS.csv",
     "analysis_out_type": "verbose",
     "query": {
-        "metapath": "APA",
+        "metapath": "AP",
         "src_field": "name",
         "dest_field": "name",
         "buildIndex": "true",

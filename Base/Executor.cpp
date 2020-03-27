@@ -142,19 +142,19 @@ int Executor::buildTransitionMatrices(string metapath, vector<int> dimensions, m
         
         // copy constructor
         auto *transition_matrix = new TransitionMatrix(it->second);
-        auto *t = transition_matrix->getMatrix();
+        // auto *t = transition_matrix->getMatrix();
 
-        // apply constraints of source node type
-        auto cit = constraint_matrices.find(src);
-        if (cit != constraint_matrices.end()) {
-            *t = *(cit->second->getMatrix()) * (*t);
-        }
+        // // apply constraints of source node type
+        // auto cit = constraint_matrices.find(src);
+        // if (cit != constraint_matrices.end()) {
+        //     *t = *(cit->second->getMatrix()) * (*t);
+        // }
 
-        // apply constraints of target node type
-        cit = constraint_matrices.find(dest);
-        if (cit != constraint_matrices.end()) {
-            *t = (*t) * *(cit->second->getMatrix());
-        }
+        // // apply constraints of target node type
+        // cit = constraint_matrices.find(dest);
+        // if (cit != constraint_matrices.end()) {
+        //     *t = (*t) * *(cit->second->getMatrix());
+        // }
 
         transition_matrices.push_back(transition_matrix);
         

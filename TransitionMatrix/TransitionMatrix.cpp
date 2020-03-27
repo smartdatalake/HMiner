@@ -88,14 +88,14 @@ TransitionMatrix* TransitionMatrix::dot(TransitionMatrix *a, TransitionMatrix *b
     return new TransitionMatrix(res_relation, result, result->rows(), result->cols());
 }
 
-void TransitionMatrix::writeForPagerank(ofstream &fd, Eigen::SparseMatrix<int, RowMajor> *tmp_result) {
+void TransitionMatrix::writeForPagerank(ofstream &fd, Eigen::SparseMatrix<double, RowMajor> *tmp_result) {
     long double initial_score = 1.0 / tmp_result->rows();
 
     for (int key=1; key < tmp_result->rows(); ++key) {
 
         string values;
         int length = 0;
-        for (Eigen::SparseMatrix<int, RowMajor>::InnerIterator it(*tmp_result, key); it; ++it) {
+        for (Eigen::SparseMatrix<double, RowMajor>::InnerIterator it(*tmp_result, key); it; ++it) {
             
             if (!values.empty()) {
                 values += ",";
@@ -113,22 +113,22 @@ void TransitionMatrix::writeForPagerank(ofstream &fd, Eigen::SparseMatrix<int, R
     }   
 }
 
-void TransitionMatrix::write(ofstream &fd, Eigen::SparseMatrix<int, RowMajor> *tmp_result) {
+void TransitionMatrix::write(ofstream &fd, Eigen::SparseMatrix<double, RowMajor> *tmp_result) {
 
     for (int i=0; i < (*tmp_result).rows(); ++i) {
-        for (Eigen::SparseMatrix<int, RowMajor>::InnerIterator it(*tmp_result, i); it; ++it) {
+        for (Eigen::SparseMatrix<double, RowMajor>::InnerIterator it(*tmp_result, i); it; ++it) {
             fd << it.row() << "\t" << it.col() << "\t" << it.value() << "\n";
         }
     }
 }
 
-void TransitionMatrix::writeCondensed(ofstream &fd, Eigen::SparseMatrix<int, RowMajor> *tmp_result) {
+void TransitionMatrix::writeCondensed(ofstream &fd, Eigen::SparseMatrix<double, RowMajor> *tmp_result) {
 
     for (int i=0; i < (*tmp_result).rows(); ++i) {
         int srcNode = -1;
         bool added = false;
 
-        for (Eigen::SparseMatrix<int, RowMajor>::InnerIterator it(*tmp_result, i); it; ++it) {
+        for (Eigen::SparseMatrix<double, RowMajor>::InnerIterator it(*tmp_result, i); it; ++it) {
             if (srcNode != it.row()) {
                 srcNode = it.row();
                 fd << srcNode << "\t" << it.col() << "|" << it.value();
@@ -152,7 +152,7 @@ int TransitionMatrix::cols() const {
 
 int TransitionMatrix::build(string relations_dir) {
 
-    std::vector< Eigen::Triplet<int> > tripletList;
+    std::vector< Eigen::Triplet<double> > tripletList;
     string relations_file = relations_dir + this->_relation + ".csv";
     ifstream infile(relations_file);
 
