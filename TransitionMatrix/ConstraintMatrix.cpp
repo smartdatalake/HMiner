@@ -29,14 +29,14 @@ int ConstraintMatrix::build(string expression) {
     vector<bool> selected_column_list(filter.column_count(), false);
     selected_column_list[0] = true;
 
-    std::vector<Triplet<int>> triplet_list;
+    std::vector<Triplet<double>> triplet_list;
     for (std::size_t row = 1; row < filter.row_count(); ++row) {
 
         if (dsv_filter::e_match == filter[row]) {
             string id_str;
             filter.row(row, selected_column_list, id_str);
             int id = stoi(id_str);
-            triplet_list.emplace_back(id, id, 1);
+            triplet_list.emplace_back(id, id, 1.0);
         }
     }
 
@@ -50,13 +50,13 @@ int ConstraintMatrix::getDimension() const {
     return _dimension;
 }
 
-SparseMatrix<int, RowMajor>* ConstraintMatrix::getMatrix() const {
+SparseMatrix<double, RowMajor>* ConstraintMatrix::getMatrix() const {
     return _matrix;
 }
 
 void ConstraintMatrix::print() {
     for (int k=0; k < (*_matrix).outerSize(); ++k) {
-        for (Eigen::SparseMatrix<int, RowMajor>::InnerIterator it(*_matrix, k); it; ++it) {
+        for (Eigen::SparseMatrix<double, RowMajor>::InnerIterator it(*_matrix, k); it; ++it) {
             std::cout << "(" << it.row() << ","; // row index
             std::cout << it.col() << ")\t"; // col index (here it is equal to k)
         }

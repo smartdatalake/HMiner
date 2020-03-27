@@ -12,7 +12,7 @@
 using namespace std;
 using  namespace Eigen;
 
-typedef Eigen::Triplet<int> T;
+typedef Eigen::Triplet<double> T;
 
 class ConstraintMatrix {
 private:
@@ -20,11 +20,11 @@ private:
     string _node_data_file;
     int _dimension;
 
-    SparseMatrix<int, RowMajor> *_matrix;
+    SparseMatrix<double, RowMajor> *_matrix;
 public:
     ConstraintMatrix(string node_name, string node_data_file, int dimension)
      : _node_name(node_name), _node_data_file (node_data_file), _dimension (dimension) {
-         this->_matrix = new SparseMatrix<int, RowMajor>(dimension, dimension);
+         this->_matrix = new SparseMatrix<double, RowMajor>(dimension, dimension);
      }
 
     ~ConstraintMatrix() { delete _matrix; }
@@ -32,7 +32,7 @@ public:
     int build(string expression);
     void print();
 
-    SparseMatrix<int, RowMajor>* getMatrix() const;
+    SparseMatrix<double, RowMajor>* getMatrix() const;
     long double nonZeros() const;
     int getDimension() const;
 

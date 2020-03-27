@@ -11,7 +11,7 @@
 using namespace std;
 using namespace Eigen;
 
-typedef Triplet<int> T;
+typedef Triplet<double> T;
 
 class TransitionMatrix {
 
