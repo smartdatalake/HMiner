@@ -62,7 +62,7 @@ void TransitionMatrix::print() {
     cout << *_matrix << endl;
 }
 
-SparseMatrix<int, RowMajor>* TransitionMatrix::getMatrix() const {
+SparseMatrix<double, RowMajor>* TransitionMatrix::getMatrix() const {
     return this->_matrix;
 }
 
@@ -76,7 +76,7 @@ const string &TransitionMatrix::getRelation() const {
 
 TransitionMatrix* TransitionMatrix::dot(TransitionMatrix *a, TransitionMatrix *b, int threshold) {
     string res_relation = a->getRelation() + "_" + b->getRelation();
-    auto *result = new SparseMatrix<int, RowMajor>();
+    auto *result = new SparseMatrix<double, RowMajor>();
 
     if (threshold == -1) {
         *result = (*(a->getMatrix()) * *(b->getMatrix())).pruned();       // multiply and prune zeros
@@ -165,7 +165,8 @@ int TransitionMatrix::build(string relations_dir) {
     while (getline(infile, line)) {
 
         int i = 0;
-        int src = -1, dest = -1, val = 1;
+        int src = -1, dest = -1;
+        double val = 1;
         std::istringstream iss(line);
 
         while (getline(iss, line, '\t')) {
@@ -174,7 +175,7 @@ int TransitionMatrix::build(string relations_dir) {
             } else if (i == 1){
                 dest = strtol(line.c_str(), nullptr, 10);
             } else if (i == 2) {
-                val = strtol(line.c_str(), nullptr, 10);
+                val = stod(line);
             }
             i++;
         }

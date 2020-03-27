@@ -17,7 +17,7 @@ class TransitionMatrix {
 
 private:
     string _relation;
-    SparseMatrix<int, RowMajor> *_matrix;
+    SparseMatrix<double, RowMajor> *_matrix;
 
     int _rows;
     int _cols;
@@ -25,15 +25,15 @@ private:
 public:
     TransitionMatrix(string relation, int rows, int cols)
         :  _relation(relation), _rows(rows), _cols(cols) {
-            this->_matrix = new SparseMatrix<int, RowMajor>(rows, cols);
+            this->_matrix = new SparseMatrix<double, RowMajor>(rows, cols);
         }
 
-    TransitionMatrix(string relation, SparseMatrix<int, RowMajor> *matrix, int rows, int cols)
+    TransitionMatrix(string relation, SparseMatrix<double, RowMajor> *matrix, int rows, int cols)
         :  _relation(relation), _matrix(matrix), _rows(rows), _cols(cols) {}
 
     TransitionMatrix(const TransitionMatrix *that)
         : _relation(that->getRelation()), _rows(that->rows()), _cols(that->cols()) {
-        this->_matrix = new SparseMatrix<int, RowMajor>(*(that->getMatrix()));
+        this->_matrix = new SparseMatrix<double, RowMajor>(*(that->getMatrix()));
     }
     
     ~TransitionMatrix() { delete _matrix; }
@@ -41,7 +41,7 @@ public:
     int build(string relations_file);
     int buildFromSingleFile(string relations_file);
     
-    SparseMatrix<int, RowMajor>* getMatrix() const;
+    SparseMatrix<double, RowMajor>* getMatrix() const;
 
     const string &getRelation() const;
 
