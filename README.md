@@ -82,7 +82,8 @@ The program recieves parameters from a json config file. An example config file 
 
 Execute ranking with the following command: 
 ```
-bash ./workloads/hminer/hminer.sh config.json
+cd ./workloads/hminer
+bash hminer.sh config.json
 ```
 
 #### References
