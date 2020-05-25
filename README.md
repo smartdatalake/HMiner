@@ -66,6 +66,7 @@ The program recieves parameters from a json config file. An example config file 
         "dest_field": "name",
         "buildIndex": "false",
         "constraints": {
+            "P": "year >= 2000"
         }
     },
     "ranking": {
