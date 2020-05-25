@@ -1,6 +1,6 @@
 {
-    "indir": "../../data/gdelt/nodes/",
-    "irdir": "../../data/gdelt/relations/",
+    "indir": "../../data/DBLP_subset/nodes/",
+    "irdir": "../../data/DBLP_subset/relations/",
     "algorithm": "DynP",
     "hin_out": "./HIN.csv",
     "analysis_out": "./ANALYSIS.csv",
@@ -9,8 +9,9 @@
         "metapath": "APA",
         "src_field": "name",
         "dest_field": "name",
-        "buildIndex": "true",
+        "buildIndex": "false",
         "constraints": {
+		"P": "year >= 2000"
         }
     },
     "ranking": {

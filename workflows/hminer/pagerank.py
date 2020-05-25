@@ -29,6 +29,7 @@ with open(sys.argv[2]) as config_file:
 
 # Do not execute PR when no symmetric metapath is given
 if (metapath[0] != metapath[-1] or build_index == "true"):
+    print(build_index)
     sys.exit(0)
 
 # filter inputfile for a specific threshold
