@@ -1,15 +1,15 @@
 {
-    "indir": "../../data/gdelt/nodes/",
-    "irdir": "../../data/gdelt/relations/",
+    "indir": "../../data/DBLP_sample_dense/nodes/",
+    "irdir": "../../data/DBLP_sample_dense/relations/",
     "algorithm": "DynP",
     "hin_out": "./HIN.csv",
     "analysis_out": "./ANALYSIS.csv",
     "analysis_out_type": "verbose",
     "query": {
-        "metapath": "AP",
+        "metapath": "APA",
         "src_field": "name",
         "dest_field": "name",
-        "buildIndex": "true",
+        "buildIndex": "false",
         "constraints": {
         }
     },

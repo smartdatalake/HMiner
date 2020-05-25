@@ -9,7 +9,7 @@
     "pr_alpha": 0.5,
     "pr_tol": 0.00000000001,
     "query": {
-        "metapath": "APPA",
+        "metapath": "APA",
         "constraints": {
             "P": "year >= 2000 and year <= 2018"
         }
