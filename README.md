@@ -54,21 +54,26 @@ make
 The program recieves parameters from a json config file. An example config file is the following: 
 ```
 {
-    "indir": "../data/DBLP_sample_dense/nodes/",
-    "irdir": "../data/DBLP_sample_dense/relations/",
+    "indir": "../../data/DBLP_subset/nodes/",
+    "irdir": "../../data/DBLP_subset/relations/",
     "algorithm": "DynP",
-    "hin_out": "../data/out/HIN.csv",
-    "ranking_out": "../data/out/PR.csv",
-    "final_out": "../data/out/PR_final.csv",
-    "pr_alpha": 0.5,
-    "pr_tol": 0.00000000001,
+    "hin_out": "./HIN.csv",
+    "analysis_out": "./ANALYSIS.csv",
+    "analysis_out_type": "verbose",
     "query": {
-        "metapath": "APC", 
+        "metapath": "APPA",
+        "src_field": "name",
+        "dest_field": "name",
+        "buildIndex": "false",
         "constraints": {
-            "P": "year >= 2000 and year <= 2018"
         }
+    },
+    "ranking": {
+        "ranking_out": "./RANKING.csv",
+        "pr_alpha": 0.5,
+        "pr_tol": 0.00000000001,
+        "threshold": 2
     }
-    
 }
 ```
 
@@ -77,7 +82,7 @@ The program recieves parameters from a json config file. An example config file 
 
 Execute ranking with the following command: 
 ```
-bash ./workloads/ranking.sh
+bash ./workloads/hminer/hminer.sh config.json
 ```
 
 #### References
