@@ -30,12 +30,11 @@ id_n	name_s    surname_s
 
 ##### Example Input Files
 
-All methods use the same format of input files. Examples of input files can be found in the `./data/` folder. Three sample datasets are included: (a) a synthetic dataset in the folder `./data/synthetic_data/`, (b) a sparse sample of the DBLP dataset from AMiner (folder `./data/DBLP_sample_sparse/`) and (c) a denser sample from the same DBLP dataset (folder `./DBLP_sample_dense/`).
-
+All methods use the same format of input files. Examples of input files can be found in the `./data/` folder. Two sample datasets are included: (a) a subset of the GDELT dataset  `./data/GDELT/`, (b) a subset of the DBLP dataset from AMiner (folder `./data/DBLP_subset/`).
 
 ##### Example Query File
 
-An example query can be found in `data/DBLP_sample_dense/query.txt`
+An example query can be found in `data/DBLP_subset/query.txt`
 
 #### Clone & Build
 
@@ -88,4 +87,4 @@ bash hminer.sh config.json
 ```
 
 #### References
-[1] Y. P. S. W. B. Shi Chuan, Li Yitong. Constrained-meta-path-based rankingin heterogeneous information network. Knowledge and Information Systems, 2016
+[1] Y. P. S. W. B. Shi Chuan, Li Yitong. Constrained-meta-path-based ranking in heterogeneous information network. Knowledge and Information Systems, 2016
