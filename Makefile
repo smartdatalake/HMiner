@@ -3,7 +3,7 @@ CXXFLAGS+=-Wall -O3 -std=c++14 -DNDEBUG
 
 all: run ;
 	cp run workflows/ranking/ ;
-	cp run workflows/mining/ 
+	cp run workflows/hminer/ 
 
 debug: CXXFLAGS += -g3 -DDEBUG_MSG
 debug: run
