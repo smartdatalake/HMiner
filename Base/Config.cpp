@@ -21,6 +21,10 @@ const string &Config::getRelationsFile() const {
     return this->_relations_file;
 }
 
+const string &Config::getConfigFile() const {
+    return this->_config_file;
+}
+
 void Config::setNodesDir(const string &nodes_dir) {
     _nodes_dir = nodes_dir;
 }
@@ -38,18 +42,23 @@ void Config::setAlgorithm(algorithm_type algo) {
     _algo = algo;
 }
 
-void Config::setOutputFile(string output_file) {
-    _output_file = output_file;
+void Config::setOutputDir(string output_dir) {
+    _output_dir = output_dir;
 }
 
 void Config::setOutputType(const string &output_type) {
     this->_output_type = output_type;
 }
 
+void Config::setConfigFile(const string config_file) {
+    this->_config_file = config_file;
+}
+
 string Config::getAlgorithm() const {
     switch (Config::_algo) {
-        case algorithm_type::Seq:   return "Seq";
-        case algorithm_type::DynP:   return "DynP";
+        case algorithm_type::HRank:   return "HRank";
+        case algorithm_type::BS1:   return "BS1";
+        case algorithm_type::BS2:   return "BS2";
         default:      return "Unknown";
     }
 }

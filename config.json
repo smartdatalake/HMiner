@@ -3,11 +3,10 @@
     "irdir": "./data/DBLP_subset/relations/",
     "algorithm": "CBS1",
     "hin_out": "./data/out/",
-    "analysis_out": "./ANALYSIS.csv",
     "analysis_out_type": "verbose",
     "qf": "./data/DBLP_subset/queries.txt",
     "ranking": {
-        "ranking_out": "./RANKING.csv",
+        "ranking_out": "./data/out/",
         "pr_alpha": 0.5,
         "pr_tol": 0.00000000001,
         "threshold": 2

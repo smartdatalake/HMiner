@@ -33,6 +33,6 @@ public:
     static void trim(std::string &s);
 };
 
-enum algorithm_type { Seq, DynP };
+enum algorithm_type { HRank, BS1, BS2 };
 
 #endif //HRANK_UTILS_H

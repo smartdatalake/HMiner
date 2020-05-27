@@ -19,7 +19,6 @@ const char *CONFIG_FILE = "-c";
 
 int main(int argc, char* argv[]) {
 
-
     if (argc != 3) {
         Utils::usage();
         return EXIT_FAILURE;
@@ -27,10 +26,11 @@ int main(int argc, char* argv[]) {
     int i = Utils::checkArg(1, argc);
 
     // read params from config file
-    json params = FileParser::readConfig(argv[i]);
+    json params = FileParser::readJson(argv[i]);
 
     // set parameters according to config file
     Config config;
+    config.setConfigFile(argv[i]);
     config.setNodesDir(params["indir"]);
     if (!params["irdir"].empty())
         config.setRelationsDir(params["irdir"]);
@@ -38,16 +38,18 @@ int main(int argc, char* argv[]) {
         config.setRelationsFile(params["irf"]);
     
     string algorithm = params["algorithm"];
-    if (algorithm == "Seq")
-        config.setAlgorithm(algorithm_type::Seq);
-    else if (algorithm == "DynP")
-        config.setAlgorithm(algorithm_type::DynP);
+    if (algorithm == "HRank") 
+        config.setAlgorithm(algorithm_type::HRank);
+    else if (algorithm == "CBS1")
+        config.setAlgorithm(algorithm_type::BS1);
+    else if (algorithm == "CBS2" ||  algorithm == "OTree")
+        config.setAlgorithm(algorithm_type::BS2);
     else {
-        cerr << "Algorithm argument should be one of { Seq, DynP }" << endl;
+        cerr << "Algorithm argument should be one of { HRank, CBS1, CBS2, OTree }" << endl;
         return EXIT_FAILURE;
     }
 
-    config.setOutputFile(params["hin_out"]);
+    config.setOutputDir(params["hin_out"]);
     config.setOutputType(params["analysis_out_type"]);
 
     Executor* exec = new Executor(&config);

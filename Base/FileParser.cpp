@@ -5,7 +5,7 @@
 #include "../Utils.h"
 #include "../libs/csv-filter/dsv_filter.hpp"
 
-json FileParser::readConfig(string config_file) {
+json FileParser::readJson(string config_file) {
     
     // read whole file into string
     ifstream fd(config_file);

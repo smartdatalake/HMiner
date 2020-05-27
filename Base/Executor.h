@@ -30,7 +30,8 @@ public:
 
     void cleanup(map<string, ConstraintMatrix*> constraint_matrices);
     void cleanup(unordered_map<string, TransitionMatrix*> transition_matrices);
-    int write(TransitionMatrix* result, string metapath);
+    int write(int i, TransitionMatrix* result, string metapath);
+    int execRanking(int i, json query);
 
 };
 #endif //HRANK_EXECUTOR_H

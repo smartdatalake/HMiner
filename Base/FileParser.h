@@ -13,7 +13,7 @@ class FileParser {
     public:
 
         static int getMatrixDimensions(string metapath, string nodes_dir, vector<int> *dimensions);
-        static json readConfig(string config_file);
+        static json readJson(string config_file);
 };
 
 #endif

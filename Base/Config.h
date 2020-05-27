@@ -14,13 +14,14 @@ using namespace std;
 
 class Config {
 public:
+    string _config_file;
     string _nodes_dir;
     string _relations_file;
     string _relations_dir;
     string _constraints_file;
     string _query_file;
     algorithm_type _algo;
-    string _output_file;
+    string _output_dir;
     string _output_type; 
 
     void setQueryFile(const string &query_file);
@@ -39,7 +40,9 @@ public:
 
     void printArgs();
 
-    void setOutputFile(string output_dir);
+    void setOutputDir(string output_dir);
+
+    void setConfigFile(string config_file);
 
     string getAlgorithm() const;
 
@@ -50,6 +53,8 @@ public:
     const string &getRelationsDir() const;
     
     const string &getOutputType() const;
+
+    const string &getConfigFile() const;
 };
 
 

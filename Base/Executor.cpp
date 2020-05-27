@@ -43,7 +43,7 @@ int Executor::buildConstraintMatrices(json query, vector<int> *dimensions, map<s
             }
 
             auto *matrix = new ConstraintMatrix(node_name, node_data_file, (*dimensions)[i]);
-            
+
             if (matrix->build(expression)) {
                 cerr << "Error: Building constraint matrix for entity " << node_name << endl;
                 return -1;
@@ -171,8 +171,8 @@ int Executor::buildTransitionMatrices(string metapath, vector<int> dimensions, m
     return 0;
 }
 
-int Executor::write(TransitionMatrix* result, string outfile) {
-
+int Executor::write(int i, TransitionMatrix* result, string output_dir) {
+    string outfile = output_dir + "/q" + std::to_string(i) + ".csv";
     ofstream fd = ofstream(outfile);
 
     if (this->_config->getOutputType() == "condensed") {
@@ -185,74 +185,93 @@ int Executor::write(TransitionMatrix* result, string outfile) {
     return 0;
 }
 
+int Executor::execRanking(int i, json query) {
+    string cmd = "python pagerank.py "
+            + this->_config->getConfigFile() + " "
+            + this->_config->_output_dir + "/q" + std::to_string(i) + ".csv" + " "
+            + "q" + std::to_string(i) + "_ranking.csv" + " "
+            + (string)query["metapath"] + " "
+            + (string)query["src_field"];
+    return system(cmd.c_str());
+}
+
 void Executor::run(json params) {
+
     json query = params["query"];
     json ranking = params["ranking"];
 
-    Utils::logProgress("Processing Metapath: " + to_string(query["metapath"]) + "\n");
+    istream *infile = new ifstream(params["qf"]);
+    string query_line;
+    int i = 0;
 
-    // calculate dimensions for matrices 
-    clock_t begin = clock();
-    vector<int> dimensions;
-    
-    Utils::logProgress("Calculating Matrix Dimensions");
+    while (getline(*infile, query_line)) {
 
-    if (FileParser::getMatrixDimensions(query["metapath"], this->_config->_nodes_dir, &dimensions)) {
-        cerr << "Error: Cannot read matrix dimensions from input files" << endl;
-        exit(EXIT_FAILURE);
-    }
-    Utils::logTime(begin);
+        json query = json::parse(query_line);
+        cout << endl;
+        Utils::logProgress("Processing Metapath: " + to_string(query["metapath"]) + "\n");
+        
+        // calculate dimensions for matrices 
+        clock_t begin = clock();
+        vector<int> dimensions;
+        
+        Utils::logProgress("Calculating Matrix Dimensions");
 
-    // if constraints are given, build constraint matrices
-    Utils::logProgress("Builiding Constraint Matrices");
-    begin = clock();
-    map<string, ConstraintMatrix*> constraint_matrices;
-    if (!query["constraints"].empty()) {
-        if (this->buildConstraintMatrices(query, &dimensions, constraint_matrices)) {
-            cerr << "Error: Building constraint matrices" << endl;
+        if (FileParser::getMatrixDimensions(query["metapath"], this->_config->_nodes_dir, &dimensions)) {
+            cerr << "Error: Cannot read matrix dimensions from input files" << endl;
             exit(EXIT_FAILURE);
         }
-    }    
-    Utils::logTime(begin);
+        Utils::logTime(begin);
 
-    // build transition matrices
-    vector<TransitionMatrix*> transition_matrices ;
-    if (this->buildTransitionMatrices(query["metapath"], dimensions, constraint_matrices, transition_matrices)) {
-        cerr << "Error: Building Transition Matrices" << endl;
-        exit(EXIT_FAILURE);
-    }
+        // if constraints are given, build constraint matrices
+        Utils::logProgress("Builiding Constraint Matrices");
+        begin = clock();
+        map<string, ConstraintMatrix*> constraint_matrices;
+        if (!query["constraints"].empty()) {
+            if (this->buildConstraintMatrices(query, &dimensions, constraint_matrices)) {
+                cerr << "Error: Building constraint matrices" << endl;
+                exit(EXIT_FAILURE);
+            }
+        }    
+        Utils::logTime(begin);
 
-    auto* hrank = new HRankSY(this->_config);
+        // build transition matrices
+        vector<TransitionMatrix*> transition_matrices ;
+        if (this->buildTransitionMatrices(query["metapath"], dimensions, constraint_matrices, transition_matrices)) {
+            cerr << "Error: Building Transition Matrices" << endl;
+            exit(EXIT_FAILURE);
+        }
 
-    begin = clock();
-    Utils::logProgress("Mining Associations");
-    algorithm_type algorithm = this->_config->_algo;
-    TransitionMatrix* result = nullptr;
+        auto* hrank = new HRankSY(this->_config);
 
-    if (transition_matrices.size() > 1) {
-        if (algorithm == algorithm_type::Seq || algorithm == algorithm_type::DynP) {
-            
+        begin = clock();
+        Utils::logProgress("Mining Associations");
+        algorithm_type algorithm = this->_config->_algo;
+        TransitionMatrix* result = nullptr;
+
+        if (transition_matrices.size() > 1) {
+                
             int threshold = -1;
             if (query["buildIndex"] == "false") {
                 threshold = ranking["threshold"];
             }
 
             result = hrank->run(query["metapath"], threshold, transition_matrices, dimensions);
+
         } else {
-            cerr << "Error: Unknown algorithm given" << endl;
-            exit(EXIT_FAILURE);
-        } 
-    } else {
-        result = transition_matrices[0];
+            result = transition_matrices[0];
+        }
+
+        Utils::logTime(begin);
+
+        begin = clock();
+        Utils::logProgress("Writing Results");
+        this->write(i, result, this->_config->_output_dir);
+        this->execRanking(i, query);
+        Utils::logTime(begin);
+        
+        i++;
+
+        delete result;
+        delete hrank;
     }
-
-    Utils::logTime(begin);
-
-    begin = clock();
-    Utils::logProgress("Writing Results");
-    this->write(result, this->_config->_output_file);
-    Utils::logTime(begin);
-
-    delete result;
-    delete hrank;
 }
