@@ -1,10 +1,12 @@
 {
     "indir": "./data/DBLP_subset/nodes/",
     "irdir": "./data/DBLP_subset/relations/",
-    "algorithm": "CBS1",
+    "algorithm": "CBS2",
     "hin_out": "./data/out/",
-    "analysis_out_type": "verbose",
     "qf": "./data/DBLP_subset/queries.txt",
+    "cache_size": 4096,
+    "cache_policy": "PGDS",
+    "dynamic_optimizer": "Sparse",
     "ranking": {
         "ranking_out": "./data/out/",
         "pr_alpha": 0.5,

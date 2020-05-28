@@ -18,14 +18,15 @@ using namespace std;
 using namespace Eigen;
 
 
-TransitionMatrix* HRankSY::run(string metapath, int threshold, vector<TransitionMatrix*> matrices, vector<int> dimensions) {
+TransitionMatrix* HRankSY::run(string metapath, vector<TransitionMatrix*> matrices, vector<int> dimensions) {
 
     TransitionMatrix *result = nullptr;
 
-    if (this->_config->_algo == algorithm_type::Seq) {
-        result = MatrixMultiplier::sequential(matrices, threshold, true);
+    if (this->_config->_algo == algorithm_type::HRankSeq) {
+        result = MatrixMultiplier::sequential(matrices, this->_config->getThreshold(), true);
     } else {
-        result = MatrixMultiplier::dynamic(matrices, threshold, dimensions, true);
+        long double cost = 0;
+        result = MatrixMultiplier::dynamic(matrices, this->_config->getThreshold(), dimensions, this->_config->getDynOptimizerType(), true, cost);
     }
 
     return result;

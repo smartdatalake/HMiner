@@ -33,6 +33,8 @@ public:
     static void trim(std::string &s);
 };
 
-enum algorithm_type { HRank, BS1, BS2 };
+enum algorithm_type { HRankSeq, HRankDynP, BS1, BS2, OTree };
+enum optimizer_type { Dense, Sparse };
+enum cache_type { LRU, PGDS };
 
 #endif //HRANK_UTILS_H

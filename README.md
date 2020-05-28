@@ -54,23 +54,16 @@ make
 The program recieves parameters from a json config file. An example config file is the following: 
 ```
 {
-    "indir": "../../data/DBLP_subset/nodes/",
-    "irdir": "../../data/DBLP_subset/relations/",
-    "algorithm": "DynP",
-    "hin_out": "./HIN.csv",
-    "analysis_out": "./ANALYSIS.csv",
-    "analysis_out_type": "verbose",
-    "query": {
-        "metapath": "APPA",
-        "src_field": "name",
-        "dest_field": "name",
-        "buildIndex": "false",
-        "constraints": {
-            "P": "year >= 2000"
-        }
-    },
+    "indir": "./data/DBLP_subset/nodes/",
+    "irdir": "./data/DBLP_subset/relations/",
+    "algorithm": "OTree",
+    "hin_out": "./data/out/",
+    "qf": "./data/DBLP_subset/queries.txt",
+    "cache_size": 4096,
+    "cache_policy": "PGDS",
+    "dynamic_optimizer": "Sparse",
     "ranking": {
-        "ranking_out": "./RANKING.csv",
+        "ranking_out": "./data/out/",
         "pr_alpha": 0.5,
         "pr_tol": 0.00000000001,
         "threshold": 2
@@ -78,13 +71,20 @@ The program recieves parameters from a json config file. An example config file 
 }
 ```
 
+#### Query Workload 
+Thq query workload has the following format: 
+```
+{ "metapath": "APPA", "constraints": { "P": "year >= 2000" } }
+{ "metapath": "APPAP", "constraints": { "P": "year >= 2000" }, "src_field": "name" }}
+```
+Fields "metapath" and "constraints" are required. 
+The field "src_field" is optional and is used to append the specified column in the output in the case of ranking.
 
 #### Execution
 
 Execute ranking with the following command: 
 ```
-cd ./workloads/hminer
-bash hminer.sh config.json
+./run -c config.json
 ```
 
 #### References

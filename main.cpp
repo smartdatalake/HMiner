@@ -38,8 +38,10 @@ int main(int argc, char* argv[]) {
         config.setRelationsFile(params["irf"]);
     
     string algorithm = params["algorithm"];
-    if (algorithm == "HRank") 
-        config.setAlgorithm(algorithm_type::HRank);
+    if (algorithm == "HRankSeq") 
+        config.setAlgorithm(algorithm_type::HRankSeq);
+    else if (algorithm == "HRankDynP") 
+        config.setAlgorithm(algorithm_type::HRankDynP);
     else if (algorithm == "CBS1")
         config.setAlgorithm(algorithm_type::BS1);
     else if (algorithm == "CBS2" ||  algorithm == "OTree")
@@ -49,8 +51,33 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
 
+    string cache_policy = params["cache_policy"];
+    if (cache_policy == "PGDS")
+        config.setCachePolicy(cache_type::PGDS);
+    else
+        config.setCachePolicy(cache_type::LRU);
+
+    string dynamic_optimizer = params["dynamic_optimizer"];
+    if (dynamic_optimizer == "Sparse") {
+        config.setDynOptimizerType(optimizer_type::Sparse);
+    } else if (dynamic_optimizer == "Dense") {
+        config.setDynOptimizerType(optimizer_type::Dense);
+    } else {
+        perror("Unrecognised Dynamic Optimizer Type given");
+        Utils::usage();
+        exit(EXIT_FAILURE);
+    }
     config.setOutputDir(params["hin_out"]);
-    config.setOutputType(params["analysis_out_type"]);
+    
+    // this can also set to condensed, 
+    // but this is not currently handled from pagerank
+    config.setOutputType("verbose");    
+    config.setCacheSize(params["cache_size"]);
+
+    // check if config["ranking"]["threshold"] exists
+    if (params["ranking"].find("threshold") != params["ranking"].end()) {
+        config.setTreshold(params["ranking"]["threshold"]);
+    }
 
     Executor* exec = new Executor(&config);
     exec->run(params);

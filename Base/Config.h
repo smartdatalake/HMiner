@@ -23,6 +23,12 @@ public:
     algorithm_type _algo;
     string _output_dir;
     string _output_type; 
+    string _constraints;
+    long double _cache_size;
+    long double _cache_threshold = 0.8;
+    cache_type _cache_policy;
+    int _threshold = -1;
+    optimizer_type _dyn_optimizer_type;
 
     void setQueryFile(const string &query_file);
 
@@ -55,6 +61,50 @@ public:
     const string &getOutputType() const;
 
     const string &getConfigFile() const;
+
+    void setConstraint(string constraint) {
+        this->_constraints = constraint;
+    }
+
+    string getConstraint() const {
+        return this->_constraints;
+    }
+
+    void setCacheSize(float size) {
+        this->_cache_size = size;
+    }
+
+    long double getCacheSize() {
+        return this->_cache_size;
+    }
+
+    long double getCacheThreshold() {
+        return this->_cache_size * this->_cache_threshold;
+    }
+
+    void setCachePolicy(cache_type ct) {
+        this->_cache_policy = ct;
+    }
+
+    cache_type getCachePolicy() {
+        return this->_cache_policy;
+    }
+
+    int getThreshold() {
+        return this->_threshold;
+    }
+
+    void setTreshold(int t) {
+        this->_threshold = t;
+    }
+
+    void setDynOptimizerType(optimizer_type type) {
+        this->_dyn_optimizer_type = type;
+    }
+
+    optimizer_type getDynOptimizerType() const {
+        return this->_dyn_optimizer_type;
+    }
 };
 
 

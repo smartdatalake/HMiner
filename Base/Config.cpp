@@ -56,7 +56,8 @@ void Config::setConfigFile(const string config_file) {
 
 string Config::getAlgorithm() const {
     switch (Config::_algo) {
-        case algorithm_type::HRank:   return "HRank";
+        case algorithm_type::HRankSeq:   return "HRankSeq";
+        case algorithm_type::HRankDynP:   return "HRankDynP";
         case algorithm_type::BS1:   return "BS1";
         case algorithm_type::BS2:   return "BS2";
         default:      return "Unknown";

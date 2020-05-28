@@ -23,6 +23,8 @@ private:
     int _cols;
 
 public:
+    TransitionMatrix() = default;
+
     TransitionMatrix(string relation, int rows, int cols)
         :  _relation(relation), _rows(rows), _cols(cols) {
             this->_matrix = new SparseMatrix<int, RowMajor>(rows, cols);
@@ -57,6 +59,11 @@ public:
     void write(ofstream &fd, SparseMatrix<int, RowMajor> *tmp_result);
     void writeCondensed(ofstream &fd, Eigen::SparseMatrix<int, RowMajor> *tmp_result);
     void writeForPagerank(ofstream &fd, Eigen::SparseMatrix<int, RowMajor> *tmp_result);
+
+    long double memory();
+    const string &get_relation() const;
+    long double getSparsity();
+    void copy(const TransitionMatrix &that);
 };
 
 

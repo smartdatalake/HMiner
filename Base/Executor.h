@@ -19,6 +19,7 @@ class Executor {
     Config* _config;
 
     map<string, map<string, string>> _constraints;
+    unordered_map<string, TransitionMatrix*> _t_matrices;
 
 public:
     Executor(Config* config);
@@ -33,5 +34,6 @@ public:
     int write(int i, TransitionMatrix* result, string metapath);
     int execRanking(int i, json query);
 
+    void freeMatrices(algorithm_type algorithm, vector<TransitionMatrix*> matrices, TransitionMatrix *result, bool is_cached);
 };
 #endif //HRANK_EXECUTOR_H

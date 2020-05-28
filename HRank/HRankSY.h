@@ -17,7 +17,7 @@ public:
     
     HRankSY(Config *config);
     
-    TransitionMatrix* run(string metapath, int threshold, vector<TransitionMatrix*> matrices, vector<int> dimensions);
+    TransitionMatrix* run(string metapath, vector<TransitionMatrix*> matrices, vector<int> dimensions);
 };
 
 

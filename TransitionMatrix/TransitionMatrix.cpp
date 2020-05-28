@@ -75,7 +75,7 @@ const string &TransitionMatrix::getRelation() const {
 }
 
 TransitionMatrix* TransitionMatrix::dot(TransitionMatrix *a, TransitionMatrix *b, int threshold) {
-    string res_relation = a->getRelation() + "_" + b->getRelation();
+    string res_relation = a->get_relation() + b->get_relation().substr(1);
     auto *result = new SparseMatrix<int, RowMajor>();
 
     if (threshold == -1) {
@@ -188,4 +188,37 @@ int TransitionMatrix::build(string relations_dir) {
     infile.close();
     
     return 0;
+}
+
+const string &TransitionMatrix::get_relation() const {
+    return _relation;
+}
+
+/**
+ * returns memory size of TransitionMatrix in MB
+ */
+long double TransitionMatrix::memory() {
+
+    long double mSize = 0;
+    
+    // size of storing non-zero elements and inner-indices array
+    mSize += this->_matrix->nonZeros() * 2 * sizeof(int);
+
+    // size of storing outer-starts
+    mSize += this->_matrix->outerSize() * sizeof(int);
+
+    return mSize / (1024.0 * 1024.0);
+}
+
+long double TransitionMatrix::getSparsity() {
+    return this->_matrix->nonZeros() / ((long double) this->_cols * this->_rows);
+}
+
+void TransitionMatrix::copy(const TransitionMatrix &that) {
+    this->_relation = that.get_relation();
+
+    this->_rows = that.rows();
+    this->_cols = that.cols(); 
+
+    this->_matrix = new SparseMatrix<int, RowMajor>(*(that.getMatrix()));
 }

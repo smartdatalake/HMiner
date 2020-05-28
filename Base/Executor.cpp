@@ -7,7 +7,8 @@
 #include "Executor.h"
 #include "../HRank/HRankSY.h"
 #include "FileParser.h"
-
+#include "../CacheBaselines/CBS1.h"
+#include "../CacheBaselines/CBS2.h"
 using namespace Eigen;
 
 Executor::Executor(Config* config) : _config(config) {}
@@ -114,7 +115,7 @@ int Executor::buildTransitionMatrices(string metapath, vector<int> dimensions, m
             }
 
             matrices_map.emplace(relation, tm);
-            #ifdef DEBUG_MSG
+            #ifdef DEBUG_MSG 
                 cout << "* relations(" << relation << ") = " << tm->nonZeros() << endl;
             #endif
         }
@@ -185,13 +186,36 @@ int Executor::write(int i, TransitionMatrix* result, string output_dir) {
     return 0;
 }
 
+void Executor::freeMatrices(algorithm_type algorithm, vector<TransitionMatrix*> matrices, TransitionMatrix *result, bool is_cached) {
+
+    if (algorithm == algorithm_type::HRankSeq || algorithm == algorithm_type::HRankDynP) {
+        delete result;
+
+    // delete result if is not stored in cache
+    } else if ( (algorithm == algorithm_type::OTree || algorithm == algorithm_type::BS1 
+        || algorithm == algorithm_type::BS2) && !is_cached) {
+        
+        delete result;
+    }
+
+    // // delete matrices
+    // for (TransitionMatrix* m : matrices) {
+    //     cout << m << endl;
+    //     if (m != nullptr)  {
+    //         delete m;   
+    //     }
+    // }
+}
+
+
 int Executor::execRanking(int i, json query) {
+
     string cmd = "python pagerank.py "
             + this->_config->getConfigFile() + " "
             + this->_config->_output_dir + "/q" + std::to_string(i) + ".csv" + " "
             + "q" + std::to_string(i) + "_ranking.csv" + " "
             + (string)query["metapath"] + " "
-            + (string)query["src_field"];
+            + (string)query.value("src_field", "null");
     return system(cmd.c_str());
 }
 
@@ -199,6 +223,10 @@ void Executor::run(json params) {
 
     json query = params["query"];
     json ranking = params["ranking"];
+
+    auto* cbs1 = new CBS1(this->_config);
+    auto* cbs2 = new CBS2(this->_config);
+    auto* hrank = new HRankSY(this->_config);
 
     istream *infile = new ifstream(params["qf"]);
     string query_line;
@@ -208,6 +236,8 @@ void Executor::run(json params) {
 
         json query = json::parse(query_line);
         cout << endl;
+        this->_config->setConstraint(query["constraints"].dump());
+
         Utils::logProgress("Processing Metapath: " + to_string(query["metapath"]) + "\n");
         
         // calculate dimensions for matrices 
@@ -241,22 +271,27 @@ void Executor::run(json params) {
             exit(EXIT_FAILURE);
         }
 
-        auto* hrank = new HRankSY(this->_config);
 
         begin = clock();
         Utils::logProgress("Mining Associations");
         algorithm_type algorithm = this->_config->_algo;
         TransitionMatrix* result = nullptr;
+        bool is_cached = false;
 
         if (transition_matrices.size() > 1) {
-                
-            int threshold = -1;
-            if (query["buildIndex"] == "false") {
-                threshold = ranking["threshold"];
+
+            // choose appropriate algorithm
+            if (algorithm == algorithm_type::HRankSeq || algorithm == algorithm_type::HRankDynP) {
+                result = hrank->run(query["metapath"], transition_matrices, dimensions);
+            } else if (algorithm == algorithm_type::BS1) {
+                result = cbs1->run(query["metapath"], transition_matrices, dimensions, is_cached);
+            } else if (algorithm == algorithm_type::BS2 || algorithm == algorithm_type::OTree) {
+                result = cbs2->run(query["metapath"], transition_matrices, dimensions, is_cached);
+            } else {
+                cout << "ERROR: Unknown algorithm given" << endl;
+                return;
             }
-
-            result = hrank->run(query["metapath"], threshold, transition_matrices, dimensions);
-
+            
         } else {
             result = transition_matrices[0];
         }
@@ -271,7 +306,10 @@ void Executor::run(json params) {
         
         i++;
 
-        delete result;
-        delete hrank;
+        this->freeMatrices(algorithm, transition_matrices, result, is_cached);
     }
+
+    delete hrank;
+    delete cbs1;
+    delete cbs2;
 }

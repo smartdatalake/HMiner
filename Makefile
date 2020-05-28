@@ -12,13 +12,17 @@ run: main.o \
 	Utils.o \
 	Base/Config.o \
 	HRank/HRankSY.o \
+	Cache/LRUCache/LRUCache.o \
+	Cache/PGDSCache/PGDSCache.o \
 	TransitionMatrix/ConstraintMatrix.o \
 	TransitionMatrix/TransitionMatrix.o \
 	MatrixMultiplier/DynamicOptimizer.o \
 	Base/Executor.o \
 	MatrixMultiplier/MatrixMultiplier.o \
-	Base/FileParser.o
-	
+	Base/FileParser.o \
+	CacheBaselines/CBS1.o \
+	CacheBaselines/CBS2.o \
+
 	$(CXX) -o $@ $^ -L BaseAlgorithm/ -L TransitionMatrix/ $(CXXFLAGS)
 
 clean_temp:
@@ -30,6 +34,9 @@ clean:
 	rm HRank/*.o
 	rm TransitionMatrix/*.o
 	rm MatrixMultiplier/*.o
+	rm Cache/LRUCache/*.o
+	rm Cache/PGDSCache/*.o
+	rm CacheBaselines/*.o
 	rm run
 	rm workflows/ranking/run
-	rm workflows/mining/run
+	rm workflows/hminer/run

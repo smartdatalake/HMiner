@@ -67,10 +67,16 @@ sorted_indices = sorted_indices[np.isin(sorted_indices, indices)]
 
 # write results to output file
 print("Ranking\t5\tWriting Results", flush=True)
-idx_file = nodes_dir + metapath[0] + ".csv"
-idx = utils.read_data_file(idx_file, src_field)
+
+if src_field != "null":
+    idx_file = nodes_dir + metapath[0] + ".csv"
+    idx = utils.read_data_file(idx_file, src_field)
 
 with open(outfile, 'w', newline='') as csvfile:
     filewriter = csv.writer(csvfile, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     for i in sorted_indices:
-        filewriter.writerow([str(i), idx[str(i)], PR[i]])
+        if src_field != "null":
+            filewriter.writerow([str(i), idx[str(i)], PR[i]])
+        else:
+            filewriter.writerow([str(i), PR[i]])
+
